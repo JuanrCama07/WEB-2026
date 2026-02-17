@@ -136,5 +136,5 @@ ClearUp busca convertirse en un sistema de apoyo al estudiante, permitiéndole p
 
 ---
 
-##Figma
+## Figma
 https://www.figma.com/design/0oHQCLOa4NPXzfE2vV5KsI/PROTOTIPO-FUNCIONAL-WEB?node-id=41-110&t=mWjYjwyaVbKuMCfv-1
