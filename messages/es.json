@@ -12,10 +12,213 @@
     "title": "Gestión de Materias",
     "simulator": "Simulador de Notas",
     "resources": "Recursos de Estudio",
-    "calculate": "Calcular Promedio Proyectado"
+    "calculate": "Calcular Promedio Proyectado",
+    "intro": "Registra tus materias, tus notas actuales y simula qué necesitas para alcanzar tu meta por curso.",
+    "profileSection": "Mi perfil y metas",
+    "listTitle": "Mis cursos del semestre",
+    "summary": {
+      "subjects": "Materias",
+      "subjectsDetail": "Cursos registrados para simular rendimiento.",
+      "subjectsLabel": "materias",
+      "credits": "Créditos",
+      "creditsDetail": "Carga académica actual registrada.",
+      "creditsLabel": "créditos",
+      "projectedAverage": "Promedio proyectado",
+      "projectedAverageDetail": "Promedio ponderado según tus metas y notas actuales."
+    },
+    "profileCard": {
+      "title": "Perfil del semestre",
+      "defaultName": "Estudiante ClearUp",
+      "semester": "Semestre:",
+      "goal": "Meta:",
+      "undefined": "Sin definir",
+      "noGoal": "Configura tu objetivo"
+    },
+    "profilePlaceholders": {
+      "name": "Tu nombre",
+      "semester": "Semestre actual (ej. 2026-1)",
+      "goal": "Meta académica / personal para este semestre"
+    },
+    "form": {
+      "createTitle": "Nueva materia",
+      "editTitle": "Editar materia",
+      "description": "Agrega evaluaciones con su peso y registra tus notas actuales para proyectar resultados.",
+      "subjectName": "Nombre de la materia",
+      "credits": "Créditos",
+      "goalGrade": "Meta de nota",
+      "evaluationName": "Nombre de la evaluación",
+      "weight": "Peso %",
+      "grade": "Nota"
+    },
+    "actions": {
+      "newSubject": "Nueva materia",
+      "saveSubject": "Agregar materia",
+      "saveChanges": "Guardar cambios",
+      "edit": "Editar",
+      "delete": "Quitar",
+      "cancel": "Cancelar",
+      "addEvaluation": "Agregar evaluación",
+      "remove": "Eliminar"
+    },
+    "simulatorMeta": {
+      "goal": "Meta",
+      "current": "Nota actual",
+      "projected": "Proyectada",
+      "needed": "Necesaria",
+      "completed": "Completada",
+      "unreachable": "Mayor a 5.0",
+      "weightCompleted": "Peso completado",
+      "remaining": "Peso faltante:",
+      "pendingGrade": "Pendiente"
+    },
+    "empty": {
+      "title": "Aún no has agregado materias",
+      "body": "Crea una materia y registra sus evaluaciones para empezar a simular tu promedio proyectado."
+    },
+    "defaults": {
+      "finalExam": "Evaluación final"
+    }
   },
   "Common": {
     "welcome": "Hola, Samuel. ¿Qué vamos a organizar hoy?",
     "quickCapture": "Captura rápida (Inbox)"
+  },
+  "Tasks": {
+    "title": "Gestión unificada de entregas y parciales",
+    "subtitle": "Crea y administra entregas, parciales y proyectos en un solo espacio con prioridad, estado, subtareas, avance y recordatorios para no dejar pasar fechas clave.",
+    "newActivity": "Nueva actividad",
+    "editActivity": "Editar actividad",
+    "formDescription": "Registra una obligación académica o actualiza su avance sin salir de esta vista.",
+    "saveActivity": "Guardar actividad",
+    "updateActivity": "Actualizar actividad",
+    "resetForm": "Limpiar formulario",
+    "fields": {
+      "title": "Título",
+      "course": "Materia",
+      "type": "Tipo",
+      "dueDate": "Fecha de entrega",
+      "priority": "Prioridad",
+      "status": "Estado",
+      "reminder": "Recordatorio",
+      "subtasks": "Subtareas",
+      "progress": "Avance"
+    },
+    "placeholders": {
+      "title": "Ej. Entrega laboratorio 2",
+      "course": "Ej. Programación Web",
+      "subtasks": "Escribe subtareas separadas por coma"
+    },
+    "types": {
+      "assignment": "Entrega",
+      "exam": "Parcial",
+      "project": "Proyecto"
+    },
+    "priorities": {
+      "high": "Alta",
+      "medium": "Media",
+      "low": "Baja"
+    },
+    "statuses": {
+      "pending": "Pendiente",
+      "inProgress": "En progreso",
+      "completed": "Completada"
+    },
+    "summary": {
+      "total": "Actividades",
+      "dueSoon": "Vencen esta semana",
+      "highPriority": "Alta prioridad",
+      "completed": "Completadas"
+    },
+    "actions": {
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "toggleStatus": "Cambiar estado",
+      "clearReminder": "Quitar recordatorio",
+      "addReminder": "Activar recordatorio",
+      "resolveAlert": "Aplicar acción sugerida"
+    },
+    "labels": {
+      "progressCompleted": "Avance completado",
+      "subtasksCompleted": "Subtareas completadas",
+      "reminderNone": "Sin recordatorio",
+      "reminderAt": "Recordatorio",
+      "dueLabel": "Fecha límite",
+      "emptyTitle": "Actividad sin título",
+      "activitiesList": "Actividades registradas",
+      "smartReminders": "Recordatorios inteligentes",
+      "escalationPanel": "Alertas por urgencia e importancia",
+      "alertsReady": "alertas listas para revisar",
+      "noAlerts": "No hay alertas críticas en este momento.",
+      "riskLevel": "Nivel de riesgo",
+      "suggestedAction": "Acción sugerida",
+      "smartRule": "Regla inteligente aplicada",
+      "noActivities": "Aún no has registrado actividades. Crea una entrega, parcial o proyecto para comenzar."
+    },
+    "escalation": {
+      "low": "Bajo",
+      "medium": "Medio",
+      "high": "Alto",
+      "critical": "Crítico"
+    },
+    "smartMessages": {
+      "criticalDeadline": "La fecha límite está demasiado cerca y la actividad todavía requiere atención inmediata.",
+      "highPriorityStalled": "La actividad es de alta prioridad, pero el avance sigue bajo para el tiempo disponible.",
+      "reminderMissing": "La actividad no tiene recordatorio configurado y podría quedar olvidada.",
+      "lowProgress": "El avance es bajo frente a la cercanía de la entrega; conviene intervenir ahora.",
+      "onTrack": "Las actividades activas están bajo control y sin señales de escalamiento urgente.",
+      "criticalAction": "Activa un recordatorio temprano y cambia la actividad a en progreso para atenderla hoy.",
+      "highAction": "Eleva la atención de esta actividad y reserva un bloque de trabajo inmediato.",
+      "reminderAction": "Configura un recordatorio automático antes de la fecha límite.",
+      "progressAction": "Incrementa el avance mínimo esperado y deja la tarea en seguimiento activo."
+    }
+  },
+  "Dashboard": {
+    "title": "Dashboard de carga y productividad",
+    "subtitle": "Resume tu carga académica, laboral y personal para que decidas qué atacar primero durante la semana.",
+    "metrics": {
+      "totalActivities": "Actividades",
+      "dueSoon": "Vencen esta semana",
+      "averageProgress": "Avance promedio",
+      "critical": "Críticas"
+    },
+    "details": {
+      "totalActivities": "Total de entregas, parciales y proyectos registrados.",
+      "dueSoon": "Actividades activas con fecha límite en los próximos siete días.",
+      "averageProgress": "Promedio de avance entre todas las actividades registradas.",
+      "critical": "Actividades con urgencia máxima por cercanía o atraso."
+    },
+    "labels": {
+      "weekOverview": "Resumen semanal",
+      "priorityRadar": "Radar de prioridades",
+      "decisionSupport": "Soporte para decidir",
+      "currentProgress": "Progreso actual",
+      "loadBalance": "Balance de carga",
+      "timeDistribution": "Distribución",
+      "productivity": "Productividad",
+      "weeklySignal": "Señal de la semana",
+      "recommendation": "Recomendación",
+      "attackFirst": "Qué atacar primero",
+      "emptyStateTitle": "Tu dashboard todavía está vacío",
+      "emptyStateBody": "Cuando registres actividades en Mis Entregas, aquí verás la carga real, el progreso y las prioridades.",
+      "noRecommendation": "Todavía no hay actividades para priorizar.",
+      "distributionByType": "Distribución por tipo"
+    },
+    "urgency": {
+      "critical": "Crítica",
+      "high": "Alta",
+      "medium": "Media",
+      "low": "Baja"
+    },
+    "types": {
+      "assignment": "Entregas",
+      "exam": "Parciales",
+      "project": "Proyectos"
+    },
+    "insights": {
+      "completed": "Tareas completadas",
+      "avgProgress": "Avance promedio",
+      "focusBlocks": "Bloques profundos",
+      "signalPrefix": "Actividades completadas esta semana:"
+    }
   }
 }

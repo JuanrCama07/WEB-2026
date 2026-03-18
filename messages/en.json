@@ -12,10 +12,213 @@
     "title": "Subject Management",
     "simulator": "Grade Simulator",
     "resources": "Study Resources",
-    "calculate": "Calculate Projected GPA"
+    "calculate": "Calculate Projected GPA",
+    "intro": "Register your courses, current grades, and simulate what you need to reach your target in each class.",
+    "profileSection": "My profile and goals",
+    "listTitle": "My semester courses",
+    "summary": {
+      "subjects": "Subjects",
+      "subjectsDetail": "Registered courses for performance simulation.",
+      "subjectsLabel": "subjects",
+      "credits": "Credits",
+      "creditsDetail": "Current academic load on record.",
+      "creditsLabel": "credits",
+      "projectedAverage": "Projected average",
+      "projectedAverageDetail": "Weighted average based on current grades and targets."
+    },
+    "profileCard": {
+      "title": "Semester profile",
+      "defaultName": "ClearUp Student",
+      "semester": "Semester:",
+      "goal": "Goal:",
+      "undefined": "Not set",
+      "noGoal": "Set your objective"
+    },
+    "profilePlaceholders": {
+      "name": "Your name",
+      "semester": "Current semester (ex. 2026-1)",
+      "goal": "Academic / personal goal for this semester"
+    },
+    "form": {
+      "createTitle": "New subject",
+      "editTitle": "Edit subject",
+      "description": "Add evaluations with their weight and register your current grades to project results.",
+      "subjectName": "Subject name",
+      "credits": "Credits",
+      "goalGrade": "Target grade",
+      "evaluationName": "Evaluation name",
+      "weight": "Weight %",
+      "grade": "Grade"
+    },
+    "actions": {
+      "newSubject": "New subject",
+      "saveSubject": "Add subject",
+      "saveChanges": "Save changes",
+      "edit": "Edit",
+      "delete": "Remove",
+      "cancel": "Cancel",
+      "addEvaluation": "Add evaluation",
+      "remove": "Delete"
+    },
+    "simulatorMeta": {
+      "goal": "Goal",
+      "current": "Current grade",
+      "projected": "Projected",
+      "needed": "Needed",
+      "completed": "Completed",
+      "unreachable": "Above 5.0",
+      "weightCompleted": "Completed weight",
+      "remaining": "Remaining weight:",
+      "pendingGrade": "Pending"
+    },
+    "empty": {
+      "title": "You have not added subjects yet",
+      "body": "Create a subject and register its evaluations to start simulating your projected average."
+    },
+    "defaults": {
+      "finalExam": "Final evaluation"
+    }
   },
   "Common": {
     "welcome": "Hi, Samuel. What are we organizing today?",
     "quickCapture": "Quick Capture (Inbox)"
+  },
+  "Tasks": {
+    "title": "Unified delivery and exam management",
+    "subtitle": "Create and manage assignments, exams, and projects in one place with priority, status, subtasks, progress, and reminders so important deadlines do not slip.",
+    "newActivity": "New activity",
+    "editActivity": "Edit activity",
+    "formDescription": "Register a new academic obligation or update its progress without leaving this view.",
+    "saveActivity": "Save activity",
+    "updateActivity": "Update activity",
+    "resetForm": "Reset form",
+    "fields": {
+      "title": "Title",
+      "course": "Course",
+      "type": "Type",
+      "dueDate": "Due date",
+      "priority": "Priority",
+      "status": "Status",
+      "reminder": "Reminder",
+      "subtasks": "Subtasks",
+      "progress": "Progress"
+    },
+    "placeholders": {
+      "title": "Ex. Lab 2 submission",
+      "course": "Ex. Web Programming",
+      "subtasks": "Write subtasks separated by commas"
+    },
+    "types": {
+      "assignment": "Assignment",
+      "exam": "Exam",
+      "project": "Project"
+    },
+    "priorities": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "statuses": {
+      "pending": "Pending",
+      "inProgress": "In progress",
+      "completed": "Completed"
+    },
+    "summary": {
+      "total": "Activities",
+      "dueSoon": "Due this week",
+      "highPriority": "High priority",
+      "completed": "Completed"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "toggleStatus": "Change status",
+      "clearReminder": "Remove reminder",
+      "addReminder": "Enable reminder",
+      "resolveAlert": "Apply suggested action"
+    },
+    "labels": {
+      "progressCompleted": "Completed progress",
+      "subtasksCompleted": "Completed subtasks",
+      "reminderNone": "No reminder",
+      "reminderAt": "Reminder",
+      "dueLabel": "Deadline",
+      "emptyTitle": "Untitled activity",
+      "activitiesList": "Registered activities",
+      "smartReminders": "Smart reminders",
+      "escalationPanel": "Alerts by urgency and importance",
+      "alertsReady": "alerts ready to review",
+      "noAlerts": "There are no critical alerts right now.",
+      "riskLevel": "Risk level",
+      "suggestedAction": "Suggested action",
+      "smartRule": "Applied smart rule",
+      "noActivities": "You have not added activities yet. Create an assignment, exam, or project to get started."
+    },
+    "escalation": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "critical": "Critical"
+    },
+    "smartMessages": {
+      "criticalDeadline": "The deadline is too close and this activity still needs immediate attention.",
+      "highPriorityStalled": "This is a high-priority activity, but progress is still too low for the time left.",
+      "reminderMissing": "This activity has no reminder configured and could easily be forgotten.",
+      "lowProgress": "Progress is low compared with how close the deadline is; it should be addressed now.",
+      "onTrack": "Active activities are under control and show no urgent escalation signals.",
+      "criticalAction": "Enable an early reminder and move the activity into in-progress so it gets handled today.",
+      "highAction": "Raise attention on this activity and reserve an immediate work block.",
+      "reminderAction": "Set an automatic reminder before the deadline.",
+      "progressAction": "Raise the minimum expected progress and keep the task under active follow-up."
+    }
+  },
+  "Dashboard": {
+    "title": "Load and productivity dashboard",
+    "subtitle": "Summarize your academic, work, and personal load so you can decide what to tackle first during the week.",
+    "metrics": {
+      "totalActivities": "Activities",
+      "dueSoon": "Due this week",
+      "averageProgress": "Average progress",
+      "critical": "Critical"
+    },
+    "details": {
+      "totalActivities": "Total assignments, exams, and projects currently registered.",
+      "dueSoon": "Active items due within the next seven days.",
+      "averageProgress": "Average progress across all registered activities.",
+      "critical": "Items at highest urgency due to closeness or delay."
+    },
+    "labels": {
+      "weekOverview": "Weekly overview",
+      "priorityRadar": "Priority radar",
+      "decisionSupport": "Decision support",
+      "currentProgress": "Current progress",
+      "loadBalance": "Load balance",
+      "timeDistribution": "Distribution",
+      "productivity": "Productivity",
+      "weeklySignal": "Weekly signal",
+      "recommendation": "Recommendation",
+      "attackFirst": "What to tackle first",
+      "emptyStateTitle": "Your dashboard is still empty",
+      "emptyStateBody": "Once you add activities in My Tasks, this view will show real load, progress, and priorities.",
+      "noRecommendation": "There are no activities to prioritize yet.",
+      "distributionByType": "Distribution by type"
+    },
+    "urgency": {
+      "critical": "Critical",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "types": {
+      "assignment": "Assignments",
+      "exam": "Exams",
+      "project": "Projects"
+    },
+    "insights": {
+      "completed": "Completed tasks",
+      "avgProgress": "Average progress",
+      "focusBlocks": "Deep-work blocks",
+      "signalPrefix": "Completed activities this week:"
+    }
   }
 }

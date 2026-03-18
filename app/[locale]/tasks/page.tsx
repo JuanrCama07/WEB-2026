@@ -1,47 +1,104 @@
 import { getTranslations } from 'next-intl/server';
 
+import { TasksManager, type TasksCopy } from './tasks-manager';
+
 type Props = {
   params: Promise<{ locale: string }>;
 };
 
 export default async function TasksPage({ params }: Props) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'Navigation' });
+  const t = await getTranslations({ locale, namespace: 'Tasks' });
 
-  return (
-    <div className="space-y-8">
-      <header>
-        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
-          {t('tasks')}
-        </h1>
-        <p className="text-lg text-zinc-500 mt-2">
-          Gestiona tus entregas, parciales y proyectos con prioridad.
-        </p>
-      </header>
+  const copy: TasksCopy = {
+    title: t('title'),
+    subtitle: t('subtitle'),
+    newActivity: t('newActivity'),
+    editActivity: t('editActivity'),
+    formDescription: t('formDescription'),
+    saveActivity: t('saveActivity'),
+    updateActivity: t('updateActivity'),
+    resetForm: t('resetForm'),
+    fields: {
+      title: t('fields.title'),
+      course: t('fields.course'),
+      type: t('fields.type'),
+      dueDate: t('fields.dueDate'),
+      priority: t('fields.priority'),
+      status: t('fields.status'),
+      reminder: t('fields.reminder'),
+      subtasks: t('fields.subtasks'),
+      progress: t('fields.progress'),
+    },
+    placeholders: {
+      title: t('placeholders.title'),
+      course: t('placeholders.course'),
+      subtasks: t('placeholders.subtasks'),
+    },
+    types: {
+      assignment: t('types.assignment'),
+      exam: t('types.exam'),
+      project: t('types.project'),
+    },
+    priorities: {
+      high: t('priorities.high'),
+      medium: t('priorities.medium'),
+      low: t('priorities.low'),
+    },
+    statuses: {
+      pending: t('statuses.pending'),
+      inProgress: t('statuses.inProgress'),
+      completed: t('statuses.completed'),
+    },
+    summary: {
+      total: t('summary.total'),
+      dueSoon: t('summary.dueSoon'),
+      highPriority: t('summary.highPriority'),
+      completed: t('summary.completed'),
+    },
+    actions: {
+      edit: t('actions.edit'),
+      delete: t('actions.delete'),
+      toggleStatus: t('actions.toggleStatus'),
+      clearReminder: t('actions.clearReminder'),
+      addReminder: t('actions.addReminder'),
+      resolveAlert: t('actions.resolveAlert'),
+    },
+    labels: {
+      progressCompleted: t('labels.progressCompleted'),
+      subtasksCompleted: t('labels.subtasksCompleted'),
+      reminderNone: t('labels.reminderNone'),
+      reminderAt: t('labels.reminderAt'),
+      dueLabel: t('labels.dueLabel'),
+      emptyTitle: t('labels.emptyTitle'),
+      activitiesList: t('labels.activitiesList'),
+      smartReminders: t('labels.smartReminders'),
+      escalationPanel: t('labels.escalationPanel'),
+      alertsReady: t('labels.alertsReady'),
+      noAlerts: t('labels.noAlerts'),
+      riskLevel: t('labels.riskLevel'),
+      suggestedAction: t('labels.suggestedAction'),
+      smartRule: t('labels.smartRule'),
+      noActivities: t('labels.noActivities'),
+    },
+    escalation: {
+      low: t('escalation.low'),
+      medium: t('escalation.medium'),
+      high: t('escalation.high'),
+      critical: t('escalation.critical'),
+    },
+    smartMessages: {
+      criticalDeadline: t('smartMessages.criticalDeadline'),
+      highPriorityStalled: t('smartMessages.highPriorityStalled'),
+      reminderMissing: t('smartMessages.reminderMissing'),
+      lowProgress: t('smartMessages.lowProgress'),
+      onTrack: t('smartMessages.onTrack'),
+      criticalAction: t('smartMessages.criticalAction'),
+      highAction: t('smartMessages.highAction'),
+      reminderAction: t('smartMessages.reminderAction'),
+      progressAction: t('smartMessages.progressAction'),
+    },
+  };
 
-      {/* Sección de "Inbox" o Captura rápida (HU-05) */}
-      <div className="p-4 bg-zinc-100 dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700">
-        <input 
-          type="text" 
-          placeholder="Captura rápida de tarea (Presiona Enter)..."
-          className="w-full bg-transparent border-none focus:ring-0 text-zinc-600 dark:text-zinc-300"
-        />
-      </div>
-
-      {/* Lista de Tareas (Simulada) */}
-      <div className="space-y-3">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="flex items-center p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm">
-            <div className="h-5 w-5 rounded border border-zinc-300 dark:border-zinc-600 mr-4" />
-            <div className="flex-1">
-              <div className="h-4 w-1/3 bg-zinc-100 dark:bg-zinc-800 rounded" />
-            </div>
-            <div className="px-3 py-1 text-xs font-medium rounded-full bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400">
-              Prioridad Alta
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  return <TasksManager copy={copy} />;
 }
