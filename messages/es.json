@@ -1,0 +1,21 @@
+{
+  "Navigation": {
+    "dashboard": "Panel de Control",
+    "tasks": "Mis Entregas",
+    "calendar": "Planificador",
+    "subjects": "Materias",
+    "focus": "Modo Enfoque",
+    "habits": "Bienestar",
+    "analytics": "Mi Progreso"
+  },
+  "Subjects": {
+    "title": "Gestión de Materias",
+    "simulator": "Simulador de Notas",
+    "resources": "Recursos de Estudio",
+    "calculate": "Calcular Promedio Proyectado"
+  },
+  "Common": {
+    "welcome": "Hola, Samuel. ¿Qué vamos a organizar hoy?",
+    "quickCapture": "Captura rápida (Inbox)"
+  }
+}

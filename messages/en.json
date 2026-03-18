@@ -1,0 +1,21 @@
+{
+  "Navigation": {
+    "dashboard": "Dashboard",
+    "tasks": "My Tasks",
+    "calendar": "Planner",
+    "subjects": "Subjects",
+    "focus": "Focus Mode",
+    "habits": "Well-being",
+    "analytics": "My Progress"
+  },
+  "Subjects": {
+    "title": "Subject Management",
+    "simulator": "Grade Simulator",
+    "resources": "Study Resources",
+    "calculate": "Calculate Projected GPA"
+  },
+  "Common": {
+    "welcome": "Hi, Samuel. What are we organizing today?",
+    "quickCapture": "Quick Capture (Inbox)"
+  }
+}
