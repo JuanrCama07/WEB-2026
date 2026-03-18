@@ -1,5 +1,9 @@
 # ClearUp
 
+## Comando para ejecutar
+npm install
+npx next dev --webpack
+
 ## Descripción del proyecto
 ClearUp es una plataforma orientada a estudiantes universitarios que centraliza la organización académica, laboral y personal dentro de un único sistema.
 
