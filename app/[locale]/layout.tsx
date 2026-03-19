@@ -16,10 +16,16 @@ export default async function RootLayout(props: {
   const menuItems = [
     { name: t('dashboard'), href: 'dashboard', icon: '📊' },
     { name: t('tasks'), href: 'tasks', icon: '📅' },
-    { name: t('calendar'), href: 'calendar', icon: '🗓️' },
+    { name: t('calendar'), href: 'planner', icon: '🗓️' },
     { name: t('subjects'), href: 'subjects', icon: '📚' },
     { name: t('focus'), href: 'focus', icon: '⏱️' },
     { name: t('habits'), href: 'habits', icon: '🌱' },
+    { name: t('analytics'), href: 'analytics', icon: '📈' },
+  ];
+
+  const additionalItems = [
+    { name: 'Recordatorios', href: 'reminders', icon: '🔔' },
+    { name: 'Inbox', href: 'inbox', icon: '📥' },
   ];
 
   return (
@@ -45,6 +51,22 @@ export default async function RootLayout(props: {
                   {item.name}
                 </Link>
               ))}
+            </div>
+
+            <div className="border-t border-zinc-200 dark:border-zinc-800 pt-4">
+              <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500 px-4 mb-2">Herramientas</p>
+              <div className="flex flex-col gap-2">
+                {additionalItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={`/${locale}/${item.href}`}
+                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:text-blue-600 transition-all font-medium text-sm"
+                  >
+                    <span className="text-xl">{item.icon}</span>
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
             </div>
 
             <div className="mt-auto space-y-4">
