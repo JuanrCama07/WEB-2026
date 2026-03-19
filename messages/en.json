@@ -304,5 +304,16 @@
     "open": "Open",
     "noResources": "No resources added",
     "addFirst": "Add your first resource for this subject"
+  },
+  "AIAssistant": {
+    "title": "Academic Assistant",
+    "subtitle": "Intelligent analysis of your academic workload",
+    "greeting": "Hi, I'm your Academic Assistant. Tell me how I can help you.",
+    "placeholder": "Type your question here...",
+    "send": "Send",
+    "quickAction1": "My workload",
+    "quickAction2": "Next priority",
+    "quickAction3": "Am I doing well?",
+    "quickAction4": "How to improve"
   }
 }

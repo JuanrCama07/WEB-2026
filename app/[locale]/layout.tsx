@@ -26,6 +26,7 @@ export default async function RootLayout(props: {
   const additionalItems = [
     { name: 'Recordatorios', href: 'reminders', icon: '🔔' },
     { name: 'Inbox', href: 'inbox', icon: '📥' },
+    { name: 'Asistente IA', href: 'ai-assistant', icon: '🤖' },
   ];
 
   return (

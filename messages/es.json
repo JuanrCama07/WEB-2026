@@ -304,5 +304,16 @@
     "open": "Abrir",
     "noResources": "Sin recursos agregados",
     "addFirst": "Agrega tu primer recurso para esta materia"
+  },
+  "AIAssistant": {
+    "title": "Asistente Académico",
+    "subtitle": "Análisis inteligente de tu carga académica",
+    "greeting": "Hola, soy tu Asistente Académico. Cuéntame cómo puedo ayudarte.",
+    "placeholder": "Escribe tu pregunta aquí...",
+    "send": "Enviar",
+    "quickAction1": "Mi carga de trabajo",
+    "quickAction2": "Próxima prioridad",
+    "quickAction3": "¿Voy bien?",
+    "quickAction4": "Cómo mejorar"
   }
 }
