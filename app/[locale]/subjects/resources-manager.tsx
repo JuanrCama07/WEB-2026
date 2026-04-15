@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
+import { useAuthSession } from '@/lib/auth/client';
 import { type Resource, type ResourceType, getResourcesBySubject, addResource, deleteResource } from '@/lib/resources-store';
 
 type ResourcesManagerProps = {
@@ -10,13 +11,15 @@ type ResourcesManagerProps = {
 
 export function ResourcesManager({ subjectId }: ResourcesManagerProps) {
   const t = useTranslations('Resources');
+  const session = useAuthSession();
+  const userId = session?.id;
   const [resources, setResources] = useState<Resource[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ title: '', url: '', type: 'link' as ResourceType });
 
   useEffect(() => {
-    setResources(getResourcesBySubject(subjectId));
-  }, [subjectId]);
+    setResources(getResourcesBySubject(subjectId, userId));
+  }, [subjectId, userId]);
 
   const handleAddResource = () => {
     if (formData.title.trim() && formData.url.trim()) {
@@ -25,7 +28,7 @@ export function ResourcesManager({ subjectId }: ResourcesManagerProps) {
         url: formData.url,
         type: formData.type,
         subjectId,
-      });
+      }, userId);
       setResources([...resources, newResource]);
       setFormData({ title: '', url: '', type: 'link' });
       setShowForm(false);
@@ -33,7 +36,7 @@ export function ResourcesManager({ subjectId }: ResourcesManagerProps) {
   };
 
   const handleDeleteResource = (resourceId: string) => {
-    deleteResource(resourceId);
+    deleteResource(resourceId, userId);
     setResources(resources.filter(r => r.id !== resourceId));
   };
 
@@ -49,32 +52,32 @@ export function ResourcesManager({ subjectId }: ResourcesManagerProps) {
         <h3 className="text-lg font-bold text-zinc-900 dark:text-white">{t('title')}</h3>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"
+          className="rounded-2xl bg-[linear-gradient(135deg,#0f6cbd,#0b4f8a)] px-4 py-2 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(15,108,189,0.2)] transition hover:brightness-105"
         >
           {showForm ? 'Cancelar' : t('addResource')}
         </button>
       </div>
 
       {showForm && (
-        <div className="rounded-2xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950 space-y-3">
+        <div className="rounded-[1.6rem] border border-blue-200 bg-[linear-gradient(135deg,#eff6ff,#f8fbff)] p-4 space-y-3">
           <input
             type="text"
             placeholder={t('resourceTitle')}
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            className="w-full rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-sm"
+            className="app-input text-sm"
           />
           <input
             type="text"
             placeholder={t('resourceUrl')}
             value={formData.url}
             onChange={(e) => setFormData({ ...formData, url: e.target.value })}
-            className="w-full rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-sm"
+            className="app-input text-sm"
           />
           <select
             value={formData.type}
             onChange={(e) => setFormData({ ...formData, type: e.target.value as ResourceType })}
-            className="w-full rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-3 py-2 text-sm"
+            className="app-input text-sm"
           >
             <option value="link">{t('link')}</option>
             <option value="document">{t('document')}</option>
@@ -82,7 +85,7 @@ export function ResourcesManager({ subjectId }: ResourcesManagerProps) {
           </select>
           <button
             onClick={handleAddResource}
-            className="w-full px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"
+            className="w-full rounded-2xl bg-[linear-gradient(135deg,#0f6cbd,#0b4f8a)] px-4 py-2.5 text-sm font-semibold text-white transition hover:brightness-105"
           >
             {t('saveResource')}
           </button>
@@ -90,7 +93,7 @@ export function ResourcesManager({ subjectId }: ResourcesManagerProps) {
       )}
 
       {resources.length === 0 && !showForm ? (
-        <div className="text-center py-6 rounded-lg bg-zinc-50 dark:bg-zinc-800">
+        <div className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50/80 py-6 text-center">
           <p className="text-sm font-medium text-zinc-600 dark:text-zinc-400">{t('noResources')}</p>
         </div>
       ) : (
@@ -98,7 +101,7 @@ export function ResourcesManager({ subjectId }: ResourcesManagerProps) {
           {resources.map((resource) => (
             <div
               key={resource.id}
-              className="flex items-center justify-between rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 p-3"
+              className="flex items-center justify-between rounded-2xl border border-zinc-200 bg-zinc-50/80 p-3"
             >
               <div className="flex-1">
                 <p className="font-semibold text-zinc-900 dark:text-white text-sm">{resource.title}</p>

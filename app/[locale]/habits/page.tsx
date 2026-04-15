@@ -3,6 +3,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
+import { useAuthSession } from '@/lib/auth/client';
+import { getScopedStorageKey } from '@/lib/user-storage';
+
 type Habit = {
   id: string;
   name: string;
@@ -15,6 +18,8 @@ const DEFAULT_HABITS: Habit[] = [
   { id: 'exercise', name: 'Hacer ejercicio', targetPerWeek: 3, lastCheckInDates: [] },
   { id: 'reading', name: 'Lectura personal', targetPerWeek: 4, lastCheckInDates: [] },
 ];
+
+const STORAGE_KEY = 'clearup_habits';
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10);
@@ -50,29 +55,31 @@ function computeStreak(dates: string[]): number {
 
 export default function HabitsPage() {
   const t = useTranslations('Navigation');
-  const [habits, setHabits] = useState<Habit[]>([]);
+  const session = useAuthSession();
+  const userId = session?.id;
+  const [habits, setHabits] = useState<Habit[]>(() => {
+    if (typeof window === 'undefined') {
+      return DEFAULT_HABITS;
+    }
+
+    try {
+      const storageKey = userId ? getScopedStorageKey(STORAGE_KEY, userId) : STORAGE_KEY;
+      const stored = localStorage.getItem(storageKey);
+      return stored ? (JSON.parse(stored) as Habit[]) : DEFAULT_HABITS;
+    } catch {
+      return DEFAULT_HABITS;
+    }
+  });
   const [newHabitName, setNewHabitName] = useState('');
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem('clearup_habits');
-      if (stored) {
-        setHabits(JSON.parse(stored) as Habit[]);
-      } else {
-        setHabits(DEFAULT_HABITS);
-      }
-    } catch {
-      setHabits(DEFAULT_HABITS);
-    }
-  }, []);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('clearup_habits', JSON.stringify(habits));
+      const storageKey = userId ? getScopedStorageKey(STORAGE_KEY, userId) : STORAGE_KEY;
+      localStorage.setItem(storageKey, JSON.stringify(habits));
     } catch {
       // ignore
     }
-  }, [habits]);
+  }, [habits, userId]);
 
   const handleCheckIn = (id: string) => {
     const today = todayISO();
@@ -140,18 +147,19 @@ export default function HabitsPage() {
 
   return (
     <div className="space-y-8">
-      <header className="space-y-2">
-        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
+      <header className="app-hero rounded-[2rem] px-7 py-8">
+        <p className="app-kicker text-xs font-bold uppercase">Well-being System</p>
+        <h1 className="mt-3 text-4xl font-black tracking-tight text-zinc-950 md:text-5xl">
           {t('habits')}
         </h1>
-        <p className="text-lg text-zinc-500 mt-2">
+        <p className="mt-3 text-lg text-zinc-600">
           Mantén el equilibrio entre tu vida académica y personal con hábitos que no dependen de
           una materia.
         </p>
       </header>
 
       {/* Resumen semanal */}
-      <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-900/40 flex items-center justify-between gap-4">
+      <div className="rounded-[2rem] border border-emerald-200 bg-[linear-gradient(135deg,#ecfdf5,#ffffff)] p-5 shadow-[0_14px_30px_rgba(16,185,129,0.08)] flex items-center justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-emerald-700 dark:text-emerald-300">
             Bienestar de esta semana
@@ -173,7 +181,7 @@ export default function HabitsPage() {
           return (
             <div
               key={habito.id}
-              className="flex items-center justify-between p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-sm"
+              className="app-panel-strong flex items-center justify-between rounded-[2rem] p-6"
             >
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600">
@@ -207,7 +215,7 @@ export default function HabitsPage() {
       </div>
 
       {/* Nuevo hábito */}
-      <div className="mt-4 p-4 rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-700 bg-zinc-50/60 dark:bg-zinc-900/40 space-y-3">
+      <div className="rounded-[2rem] border border-dashed border-zinc-300 bg-white/70 p-4 space-y-3">
         <p className="text-xs font-semibold uppercase tracking-widest text-zinc-400">
           Agregar hábito personal
         </p>
@@ -217,13 +225,13 @@ export default function HabitsPage() {
             placeholder="Ej. Meditar 10 minutos, salir a caminar..."
             value={newHabitName}
             onChange={(e) => setNewHabitName(e.target.value)}
-            className="flex-1 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-transparent px-3 py-2 text-sm"
+            className="app-input flex-1 text-sm"
           />
           <button
             type="button"
             onClick={handleAddHabit}
             disabled={!newHabitName.trim()}
-            className="px-4 py-2 rounded-lg bg-zinc-900 text-white text-sm font-semibold disabled:opacity-40"
+            className="rounded-2xl bg-[linear-gradient(135deg,#0f172a,#1e293b)] px-4 py-2 text-sm font-semibold text-white disabled:opacity-40"
           >
             Guardar hábito
           </button>

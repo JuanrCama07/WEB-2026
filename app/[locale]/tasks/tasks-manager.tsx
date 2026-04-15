@@ -271,11 +271,12 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
 
   return (
     <div className="space-y-8">
-      <header className="space-y-3">
-        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900">
+      <header className="app-hero rounded-[2rem] px-7 py-8">
+        <p className="app-kicker text-xs font-bold uppercase">Operations Hub</p>
+        <h1 className="mt-3 text-4xl font-black tracking-tight text-zinc-950 md:text-5xl">
           {copy.title}
         </h1>
-        <p className="max-w-3xl text-lg text-zinc-600">
+        <p className="mt-3 max-w-3xl text-lg leading-8 text-zinc-600">
           {copy.subtitle}
         </p>
       </header>
@@ -287,14 +288,14 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
         <SummaryCard label={copy.summary.completed} value={summary.completed} accent="bg-emerald-100 text-emerald-700" />
       </section>
 
-      <section className="rounded-3xl border border-amber-200 bg-linear-to-r from-amber-50 via-white to-rose-50 p-6 shadow-sm">
+      <section className="rounded-[2rem] border border-amber-200 bg-[linear-gradient(135deg,#fff7ed,#ffffff,#fff1f2)] p-6 shadow-[0_20px_48px_rgba(245,158,11,0.08)] dark:border-amber-900/50 dark:bg-[linear-gradient(135deg,#1a2328,#101a1f,#172126)] dark:shadow-[0_20px_48px_rgba(0,0,0,0.24)]">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="space-y-2">
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-amber-700">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-amber-700 dark:text-amber-300">
               {copy.labels.smartReminders}
             </p>
-            <h2 className="text-2xl font-bold text-zinc-900">{copy.labels.escalationPanel}</h2>
-            <p className="text-sm text-zinc-600">
+            <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">{copy.labels.escalationPanel}</h2>
+            <p className="text-sm text-zinc-600 dark:text-zinc-300">
               {smartAlerts.length > 0 ? `${smartAlerts.length} ${copy.labels.alertsReady}` : copy.labels.noAlerts}
             </p>
           </div>
@@ -303,17 +304,17 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
         <div className="mt-5 grid gap-4 lg:grid-cols-2">
           {smartAlerts.length > 0 ? (
             smartAlerts.map((alert) => (
-              <div key={alert.activityId} className="rounded-3xl border border-zinc-200 bg-white p-5">
+              <div key={alert.activityId} className="rounded-[1.7rem] border border-white bg-white/95 p-5 shadow-[0_12px_28px_rgba(15,23,42,0.06)] dark:border-zinc-700 dark:bg-zinc-900/95 dark:shadow-[0_12px_28px_rgba(0,0,0,0.22)]">
                 <div className="flex flex-wrap items-center justify-between gap-3">
-                  <h3 className="text-lg font-bold text-zinc-900">{alert.title}</h3>
+                  <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">{alert.title}</h3>
                   <EscalationBadge label={copy.escalation[alert.level]} level={alert.level} />
                 </div>
-                <p className="mt-3 text-sm text-zinc-600">{alert.message}</p>
-                <div className="mt-4 rounded-2xl bg-zinc-50 p-4">
-                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-400">
+                <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-300">{alert.message}</p>
+                <div className="mt-4 rounded-2xl border border-zinc-200/70 bg-zinc-50/80 p-4 dark:border-zinc-700 dark:bg-zinc-800/80">
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-500">
                     {copy.labels.suggestedAction}
                   </p>
-                  <p className="mt-2 text-sm font-semibold text-zinc-800">{alert.action}</p>
+                  <p className="mt-2 text-sm font-semibold text-zinc-800 dark:text-zinc-100">{alert.action}</p>
                 </div>
                 <button
                   type="button"
@@ -325,7 +326,7 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
               </div>
             ))
           ) : (
-            <div className="rounded-3xl border border-emerald-200 bg-emerald-50 p-5 text-sm font-medium text-emerald-800">
+            <div className="rounded-[1.7rem] border border-emerald-200 bg-emerald-50 p-5 text-sm font-medium text-emerald-800 dark:border-emerald-900/50 dark:bg-emerald-950/30 dark:text-emerald-200">
               {copy.smartMessages.onTrack}
             </div>
           )}
@@ -333,7 +334,7 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
       </section>
 
       <section className="grid gap-6 xl:grid-cols-[1.1fr_1.4fr]">
-        <form onSubmit={handleSubmit} className="space-y-5 rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
+        <form onSubmit={handleSubmit} className="app-panel-strong space-y-5 rounded-[2rem] p-6">
           <div className="space-y-1">
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-sky-600">
               {editingId === null ? copy.newActivity : copy.editActivity}
@@ -351,7 +352,7 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
                 value={form.title}
                 onChange={(event) => setForm({ ...form, title: event.target.value })}
                 placeholder={copy.placeholders.title}
-                className="mt-2 w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 outline-none transition focus:border-sky-400"
+                className="app-input mt-2"
               />
             </Field>
 
@@ -361,7 +362,7 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
                 value={form.course}
                 onChange={(event) => setForm({ ...form, course: event.target.value })}
                 placeholder={copy.placeholders.course}
-                className="mt-2 w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 outline-none transition focus:border-sky-400"
+                className="app-input mt-2"
               />
             </Field>
 
@@ -370,7 +371,7 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
               <select
                 value={form.type}
                 onChange={(event) => setForm({ ...form, type: event.target.value as ActivityType })}
-                className="mt-2 w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 outline-none transition focus:border-sky-400"
+                className="app-input mt-2"
               >
                 <option value="assignment">{copy.types.assignment}</option>
                 <option value="exam">{copy.types.exam}</option>
@@ -384,7 +385,7 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
                 type="date"
                 value={form.dueDate}
                 onChange={(event) => setForm({ ...form, dueDate: event.target.value })}
-                className="mt-2 w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 outline-none transition focus:border-sky-400"
+                className="app-input mt-2"
               />
             </Field>
 
@@ -393,7 +394,7 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
               <select
                 value={form.priority}
                 onChange={(event) => setForm({ ...form, priority: event.target.value as ActivityPriority })}
-                className="mt-2 w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 outline-none transition focus:border-sky-400"
+                className="app-input mt-2"
               >
                 <option value="high">{copy.priorities.high}</option>
                 <option value="medium">{copy.priorities.medium}</option>
@@ -406,7 +407,7 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
               <select
                 value={form.status}
                 onChange={(event) => setForm({ ...form, status: event.target.value as ActivityStatus })}
-                className="mt-2 w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 outline-none transition focus:border-sky-400"
+                className="app-input mt-2"
               >
                 <option value="pending">{copy.statuses.pending}</option>
                 <option value="inProgress">{copy.statuses.inProgress}</option>
@@ -420,7 +421,7 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
                 type="datetime-local"
                 value={form.reminder}
                 onChange={(event) => setForm({ ...form, reminder: event.target.value })}
-                className="mt-2 w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 outline-none transition focus:border-sky-400"
+                className="app-input mt-2"
               />
             </Field>
 
@@ -446,21 +447,21 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
               value={form.subtasks}
               onChange={(event) => setForm({ ...form, subtasks: event.target.value })}
               placeholder={copy.placeholders.subtasks}
-              className="mt-2 min-h-28 w-full rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 outline-none transition focus:border-sky-400"
+              className="app-input mt-2 min-h-28"
             />
           </Field>
 
           <div className="flex flex-wrap gap-3">
             <button
               type="submit"
-              className="rounded-2xl bg-sky-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-700"
+              className="rounded-2xl bg-[linear-gradient(135deg,#0f6cbd,#0b4f8a)] px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(15,108,189,0.24)] transition hover:brightness-105"
             >
               {editingId === null ? copy.saveActivity : copy.updateActivity}
             </button>
             <button
               type="button"
               onClick={resetForm}
-              className="rounded-2xl border border-zinc-200 px-5 py-3 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50"
+              className="rounded-2xl border border-zinc-200 bg-white px-5 py-3 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50"
             >
               {copy.resetForm}
             </button>
@@ -477,7 +478,7 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
 
           <div className="space-y-4">
             {activities.length === 0 ? (
-              <div className="rounded-3xl border border-dashed border-zinc-300 bg-zinc-50 p-8 text-center">
+              <div className="rounded-[2rem] border border-dashed border-zinc-300 bg-white/70 p-8 text-center">
                 <h3 className="text-xl font-bold text-zinc-900">{copy.labels.emptyTitle}</h3>
                 <p className="mt-2 text-sm text-zinc-500">{copy.labels.noActivities}</p>
               </div>
@@ -490,7 +491,7 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
               const escalation = getEscalation(activity);
 
               return (
-                <article key={activity.id} className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
+                <article key={activity.id} className="app-panel-strong rounded-[2rem] p-6">
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div className="space-y-3">
                       <div className="flex flex-wrap gap-2">
@@ -511,14 +512,14 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
                       <button
                         type="button"
                         onClick={() => handleEdit(activity)}
-                        className="rounded-2xl border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50"
+                        className="rounded-2xl border border-zinc-200 bg-white px-4 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50"
                       >
                         {copy.actions.edit}
                       </button>
                       <button
                         type="button"
                         onClick={() => deleteActivity(activity.id)}
-                        className="rounded-2xl border border-rose-200 px-4 py-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-50"
+                        className="rounded-2xl border border-rose-200 bg-white px-4 py-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-50"
                       >
                         {copy.actions.delete}
                       </button>
@@ -551,7 +552,7 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
                     />
                   </div>
 
-                  <div className="mt-5 rounded-2xl bg-zinc-50 p-4">
+                  <div className="mt-5 rounded-2xl border border-zinc-200/70 bg-zinc-50/80 p-4">
                     <p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-400">
                       {copy.labels.smartRule}
                     </p>
@@ -632,7 +633,7 @@ function SummaryCard({
   accent: string;
 }) {
   return (
-    <div className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm">
+    <div className="app-panel-strong rounded-[1.8rem] p-5">
       <div className={`inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] ${accent}`}>
         {label}
       </div>
@@ -672,7 +673,7 @@ function Badge({
 
 function InfoCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl bg-zinc-50 p-4">
+    <div className="rounded-2xl border border-zinc-200/70 bg-zinc-50/80 p-4">
       <p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-400">{label}</p>
       <p className="mt-2 text-sm font-semibold text-zinc-800">{value}</p>
     </div>

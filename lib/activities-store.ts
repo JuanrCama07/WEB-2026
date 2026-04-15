@@ -2,6 +2,9 @@
 
 import { useSyncExternalStore } from 'react';
 
+import { getActiveClientSession, useAuthSession } from './auth/client';
+import { getScopedStorageKey } from './user-storage';
+
 export type ActivityType = 'assignment' | 'exam' | 'project';
 export type ActivityPriority = 'high' | 'medium' | 'low';
 export type ActivityStatus = 'pending' | 'inProgress' | 'completed';
@@ -29,6 +32,7 @@ const STORAGE_KEY = 'clearup_activities';
 const STORE_EVENT = 'clearup-activities-updated';
 let cachedRawValue: string | null = null;
 let cachedActivities: Activity[] = [];
+let cachedStorageKey: string | null = null;
 
 function parseActivities(value: string | null) {
   if (value === cachedRawValue) {
@@ -52,28 +56,51 @@ function parseActivities(value: string | null) {
   }
 }
 
-export function readStoredActivities() {
+function resolveStorageKey(userId?: string) {
+  const scopedUserId = userId ?? getActiveClientSession()?.id;
+
+  if (!scopedUserId) {
+    return STORAGE_KEY;
+  }
+
+  return getScopedStorageKey(STORAGE_KEY, scopedUserId);
+}
+
+export function readStoredActivities(userId?: string) {
   if (typeof window === 'undefined') {
     return [];
   }
 
-  return parseActivities(window.localStorage.getItem(STORAGE_KEY));
+  const storageKey = resolveStorageKey(userId);
+
+  if (cachedStorageKey !== storageKey) {
+    cachedRawValue = null;
+    cachedActivities = [];
+    cachedStorageKey = storageKey;
+  }
+
+  return parseActivities(window.localStorage.getItem(storageKey));
 }
 
-export function writeStoredActivities(activities: Activity[]) {
+export function writeStoredActivities(activities: Activity[], userId?: string) {
   if (typeof window === 'undefined') {
     return;
   }
 
+  const storageKey = resolveStorageKey(userId);
   const nextRawValue = JSON.stringify(activities);
   cachedRawValue = nextRawValue;
   cachedActivities = activities;
-  window.localStorage.setItem(STORAGE_KEY, nextRawValue);
+  cachedStorageKey = storageKey;
+  window.localStorage.setItem(storageKey, nextRawValue);
   window.dispatchEvent(new Event(STORE_EVENT));
 }
 
-export function updateStoredActivities(updater: (current: Activity[]) => Activity[]) {
-  writeStoredActivities(updater(readStoredActivities()));
+export function updateStoredActivities(
+  updater: (current: Activity[]) => Activity[],
+  userId?: string,
+) {
+  writeStoredActivities(updater(readStoredActivities(userId)), userId);
 }
 
 function subscribe(onStoreChange: () => void) {
@@ -93,5 +120,12 @@ function subscribe(onStoreChange: () => void) {
 }
 
 export function useStoredActivities() {
-  return useSyncExternalStore(subscribe, readStoredActivities, () => []);
+  const session = useAuthSession();
+  const userId = session?.id;
+
+  return useSyncExternalStore(
+    subscribe,
+    () => readStoredActivities(userId),
+    () => [],
+  );
 }

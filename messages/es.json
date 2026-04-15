@@ -1,12 +1,120 @@
 {
   "Navigation": {
+    "home": "Inicio",
     "dashboard": "Panel de Control",
     "tasks": "Mis Entregas",
     "calendar": "Planificador",
     "subjects": "Materias",
     "focus": "Modo Enfoque",
     "habits": "Bienestar",
-    "analytics": "Mi Progreso"
+    "analytics": "Mi Progreso",
+    "profile": "Mi perfil",
+    "tools": "Herramientas",
+    "switchLanguage": "🇺🇸 Switch to English",
+    "signOut": "Cerrar sesión",
+    "activeSession": "Sesión activa"
+  },
+  "Auth": {
+    "badge": "Acceso seguro",
+    "title": "Entra a ClearUp y organiza tu semestre.",
+    "subtitle": "Crea tu cuenta o inicia sesión para entrar a tu panel, planificador, materias y herramientas de enfoque desde un solo lugar.",
+    "tabs": {
+      "signIn": "Sign in",
+      "signUp": "Crear cuenta"
+    },
+    "fields": {
+      "name": {
+        "label": "Nombre",
+        "placeholder": "Tu nombre completo"
+      },
+      "email": {
+        "label": "Correo",
+        "placeholder": "tu@correo.com"
+      },
+      "password": {
+        "label": "Contraseña",
+        "placeholder": "Mínimo 6 caracteres"
+      }
+    },
+    "actions": {
+      "signIn": "Entrar",
+      "signUp": "Crear cuenta"
+    },
+    "switchToSignIn": "¿Ya tienes cuenta? Cambia a sign in arriba.",
+    "switchToSignUp": "¿Todavía no tienes cuenta? Cambia a crear cuenta arriba.",
+    "helper": "Accede para desbloquear tus módulos privados",
+    "demoTitle": "Flujo integrado",
+    "demoBody": "La autenticación protege tus módulos principales y mantiene la sesión activa para que entres directo al dashboard en tu siguiente visita."
+  },
+  "Home": {
+    "badge": "Centro de control",
+    "title": "Hola, {name}. Elige cómo quieres empezar hoy.",
+    "subtitle": "Antes de entrar al detalle, usa este espacio como punto de partida para ir directo al módulo que necesites en tu jornada.",
+    "todayLabel": "Ruta recomendada",
+    "todayTitle": "Empieza por lo importante y luego profundiza.",
+    "todayBody": "Revisa tu carga general, entra a tus entregas activas y luego organiza bloques de enfoque o planificación semanal según lo que tengas pendiente.",
+    "featuredTitle": "Módulos principales",
+    "featuredSubtitle": "Accesos de alto impacto",
+    "openModule": "Abrir módulo",
+    "quickTitle": "Acceso rápido",
+    "modules": {
+      "dashboard": {
+        "title": "Vista general",
+        "body": "Consulta tu carga, progreso, prioridades y recomendación principal del día."
+      },
+      "tasks": {
+        "title": "Entregas y parciales",
+        "body": "Administra actividades, fechas límite, recordatorios y subtareas desde un solo lugar."
+      },
+      "planner": {
+        "title": "Planificación semanal",
+        "body": "Distribuye tu semana, detecta vencimientos próximos y reserva bloques útiles."
+      },
+      "subjects": {
+        "title": "Materias y notas",
+        "body": "Controla cursos, simulación de notas, metas del semestre y recursos de estudio."
+      }
+    },
+    "quick": {
+      "focus": "Modo enfoque",
+      "habits": "Bienestar",
+      "reminders": "Recordatorios",
+      "inbox": "Inbox",
+      "ai": "Asistente IA",
+      "analytics": "Analítica"
+    },
+    "assistantCard": {
+      "badge": "Apoyo inteligente",
+      "title": "Pide ayuda cuando no sepas por dónde seguir.",
+      "body": "El asistente puede ayudarte a priorizar, entender tu carga académica y sugerir una siguiente acción sin salir de la plataforma.",
+      "cta": "Abrir asistente"
+    }
+  },
+  "Profile": {
+    "badge": "Configuración personal",
+    "title": "Administra tu perfil",
+    "subtitle": "Actualiza la información principal de tu cuenta para que tu espacio se mantenga personalizado y consistente en toda la plataforma.",
+    "accountTitle": "Cuenta activa",
+    "accountBody": "Estos datos se usan para identificar tu sesión y mostrar tu información en el workspace.",
+    "accountSince": "Perfil activo en ClearUp",
+    "formTitle": "Editar perfil",
+    "formBody": "Cambia tu nombre, correo y contraseña desde un solo lugar.",
+    "fields": {
+      "name": "Nombre",
+      "email": "Correo",
+      "password": "Nueva contraseña"
+    },
+    "placeholders": {
+      "name": "Tu nombre completo",
+      "email": "tu@correo.com",
+      "password": "Déjala vacía si no quieres cambiarla"
+    },
+    "passwordHelp": "Si no quieres cambiar tu contraseña, deja este campo vacío.",
+    "actions": {
+      "save": "Guardar cambios",
+      "saving": "Guardando..."
+    },
+    "success": "Tu perfil fue actualizado correctamente."
   },
   "Subjects": {
     "title": "Gestión de Materias",
@@ -80,7 +188,7 @@
     }
   },
   "Common": {
-    "welcome": "Hola, Samuel. ¿Qué vamos a organizar hoy?",
+    "welcome": "Hola,  ¿Qué vamos a organizar hoy?",
     "quickCapture": "Captura rápida (Inbox)"
   },
   "Tasks": {

@@ -60,9 +60,19 @@ export function DashboardClient({ copy }: { copy: DashboardCopy }) {
 
   return (
     <div className="space-y-8">
-      <header className="space-y-3">
-        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900">{copy.title}</h1>
-        <p className="max-w-3xl text-lg text-zinc-600">{copy.subtitle}</p>
+      <header className="app-hero rounded-[2rem] px-7 py-8">
+        <div className="flex flex-col gap-8 xl:flex-row xl:items-end xl:justify-between">
+          <div className="space-y-3">
+            <p className="app-kicker text-xs font-bold uppercase">Executive Overview</p>
+            <h1 className="max-w-3xl text-4xl font-black tracking-tight text-zinc-950 md:text-5xl">{copy.title}</h1>
+            <p className="max-w-3xl text-lg leading-8 text-zinc-600">{copy.subtitle}</p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-3 xl:min-w-[26rem]">
+            <HeroStat label={copy.metrics.totalActivities} value={String(summary.totalActivities)} />
+            <HeroStat label={copy.metrics.dueSoon} value={String(summary.dueSoon)} />
+            <HeroStat label={copy.metrics.averageProgress} value={`${summary.averageProgress}%`} />
+          </div>
+        </div>
       </header>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -73,19 +83,19 @@ export function DashboardClient({ copy }: { copy: DashboardCopy }) {
       </section>
 
       {activities.length === 0 ? (
-        <section className="rounded-3xl border border-dashed border-zinc-300 bg-white p-10 text-center shadow-sm">
+        <section className="app-panel-strong rounded-[2rem] border-dashed p-10 text-center">
           <h2 className="text-2xl font-bold text-zinc-900">{copy.labels.emptyStateTitle}</h2>
           <p className="mt-3 text-sm text-zinc-500">{copy.labels.emptyStateBody}</p>
         </section>
       ) : (
         <section className="grid gap-6 xl:grid-cols-[1.25fr_0.95fr]">
-          <article className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
+          <article className="app-panel-strong rounded-[2rem] p-6">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.24em] text-sky-600">{copy.labels.weekOverview}</p>
                 <h2 className="mt-2 text-2xl font-bold text-zinc-900">{copy.labels.priorityRadar}</h2>
               </div>
-              <div className="rounded-2xl bg-zinc-100 px-4 py-2 text-sm font-semibold text-zinc-700">
+              <div className="rounded-2xl border border-zinc-200/70 bg-white px-4 py-2 text-sm font-semibold text-zinc-700">
                 {copy.labels.decisionSupport}
               </div>
             </div>
@@ -95,7 +105,7 @@ export function DashboardClient({ copy }: { copy: DashboardCopy }) {
                 const urgency = getUrgency(item);
 
                 return (
-                  <div key={item.id} className="rounded-3xl border border-zinc-200 bg-zinc-50 p-5">
+                  <div key={item.id} className="rounded-[1.75rem] border border-zinc-200/80 bg-[linear-gradient(180deg,#ffffff,#f8fafc)] p-5 shadow-[0_10px_24px_rgba(15,23,42,0.05)]">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <h3 className="text-lg font-bold text-zinc-900">{item.title}</h3>
@@ -109,7 +119,7 @@ export function DashboardClient({ copy }: { copy: DashboardCopy }) {
                         <span>{copy.labels.currentProgress}</span>
                         <span>{item.progress}%</span>
                       </div>
-                      <div className="h-3 rounded-full bg-white">
+                      <div className="h-3 rounded-full bg-zinc-100">
                         <div className="h-3 rounded-full bg-sky-500" style={{ width: `${item.progress}%` }} />
                       </div>
                     </div>
@@ -120,7 +130,7 @@ export function DashboardClient({ copy }: { copy: DashboardCopy }) {
           </article>
 
           <div className="space-y-6">
-            <article className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
+            <article className="app-panel-strong rounded-[2rem] p-6">
               <p className="text-xs font-bold uppercase tracking-[0.24em] text-violet-600">{copy.labels.loadBalance}</p>
               <h2 className="mt-2 text-2xl font-bold text-zinc-900">{copy.labels.distributionByType}</h2>
 
@@ -142,7 +152,7 @@ export function DashboardClient({ copy }: { copy: DashboardCopy }) {
               </div>
             </article>
 
-            <article className="rounded-3xl border border-emerald-200 bg-linear-to-br from-emerald-50 to-white p-6 shadow-sm">
+            <article className="rounded-[2rem] border border-emerald-200 bg-[linear-gradient(135deg,#ecfdf5,#ffffff)] p-6 shadow-[0_18px_40px_rgba(16,185,129,0.08)]">
               <p className="text-xs font-bold uppercase tracking-[0.24em] text-emerald-700">{copy.labels.productivity}</p>
               <h2 className="mt-2 text-2xl font-bold text-zinc-900">{copy.labels.weeklySignal}</h2>
               <p className="mt-3 text-sm text-zinc-600">
@@ -156,7 +166,7 @@ export function DashboardClient({ copy }: { copy: DashboardCopy }) {
               </div>
             </article>
 
-            <article className="rounded-3xl border border-amber-200 bg-linear-to-br from-amber-50 to-white p-6 shadow-sm">
+            <article className="rounded-[2rem] border border-amber-200 bg-[linear-gradient(135deg,#fffbeb,#ffffff)] p-6 shadow-[0_18px_40px_rgba(245,158,11,0.08)]">
               <p className="text-xs font-bold uppercase tracking-[0.24em] text-amber-700">{copy.labels.recommendation}</p>
               <h2 className="mt-2 text-2xl font-bold text-zinc-900">{copy.labels.attackFirst}</h2>
               <p className="mt-3 text-sm leading-6 text-zinc-700">
@@ -184,13 +194,22 @@ function MetricCard({
   accent: string;
 }) {
   return (
-    <article className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm">
+    <article className="app-panel-strong rounded-[1.8rem] p-5">
       <div className={`inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] ${accent}`}>
         {label}
       </div>
       <p className="mt-4 text-4xl font-black tracking-tight text-zinc-900">{value}</p>
       <p className="mt-2 text-sm text-zinc-500">{detail}</p>
     </article>
+  );
+}
+
+function HeroStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-[1.4rem] border border-white/60 bg-white/70 px-4 py-4 shadow-[0_10px_24px_rgba(15,23,42,0.04)] backdrop-blur">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-zinc-500">{label}</p>
+      <p className="mt-2 text-3xl font-black tracking-tight text-zinc-950">{value}</p>
+    </div>
   );
 }
 

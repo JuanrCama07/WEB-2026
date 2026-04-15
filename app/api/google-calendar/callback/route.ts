@@ -1,6 +1,8 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
+import { AUTH_SESSION_COOKIE, getGoogleRefreshTokenCookieName, parseCookieJson, type AuthSession } from '@/lib/auth/shared';
+
 type GoogleTokenResponse = {
   access_token: string;
   expires_in: number;
@@ -73,9 +75,14 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  // Guardamos solo el refresh_token en una cookie httpOnly para poder pedir nuevos access tokens.
   const cookieStore = await cookies();
-  cookieStore.set('gc_refresh_token', tokenJson.refresh_token, {
+  const session = parseCookieJson<AuthSession>(cookieStore.get(AUTH_SESSION_COOKIE)?.value);
+
+  if (!session) {
+    return NextResponse.json({ error: 'No hay sesión activa de ClearUp para vincular Google Calendar.' }, { status: 401 });
+  }
+
+  cookieStore.set(getGoogleRefreshTokenCookieName(session.id), tokenJson.refresh_token, {
     httpOnly: true,
     secure: true,
     sameSite: 'lax',
@@ -98,4 +105,3 @@ export async function GET(request: NextRequest) {
   // Redirigimos de vuelta al calendario de la app con el locale original.
   return NextResponse.redirect(`/${locale}/calendar`);
 }
-

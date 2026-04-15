@@ -14,7 +14,7 @@ export async function generateMetadata(props: {
 
 export default function AIChatPage() {
   return (
-    <div className="h-screen -ml-12 -mr-12 mb-0">
+    <div className="w-full">
       <AIChatClient />
     </div>
   );

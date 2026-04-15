@@ -145,13 +145,14 @@ export default function RemindersPage() {
 
   return (
     <div className="space-y-8">
-      <header className="space-y-3">
-        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white">{t('title')}</h1>
-        <p className="max-w-3xl text-lg text-zinc-600 dark:text-zinc-400">{t('subtitle')}</p>
+      <header className="app-hero rounded-[2rem] px-7 py-8">
+        <p className="app-kicker text-xs font-bold uppercase">Risk Center</p>
+        <h1 className="mt-3 text-4xl font-black tracking-tight text-zinc-950 md:text-5xl">{t('title')}</h1>
+        <p className="mt-3 max-w-3xl text-lg text-zinc-600">{t('subtitle')}</p>
       </header>
 
       {alerts.length === 0 ? (
-        <section className="rounded-3xl border border-dashed border-emerald-300 bg-emerald-50 p-10 text-center dark:border-emerald-800 dark:bg-emerald-950">
+        <section className="rounded-[2rem] border border-dashed border-emerald-300 bg-[linear-gradient(135deg,#ecfdf5,#ffffff)] p-10 text-center">
           <div className="mx-auto w-16 h-16 rounded-full bg-emerald-200 dark:bg-emerald-900 flex items-center justify-center text-2xl dark:text-emerald-300">
             ✓
           </div>
@@ -160,7 +161,7 @@ export default function RemindersPage() {
       ) : (
         <div className="grid gap-6 xl:grid-cols-2">
           {/* Panel de alertas críticas */}
-          <section className="rounded-3xl border border-rose-200 bg-rose-50 p-6 dark:border-rose-900 dark:bg-rose-950">
+          <section className="rounded-[2rem] border border-rose-200 bg-[linear-gradient(135deg,#fff1f2,#ffffff)] p-6 shadow-[0_16px_32px_rgba(244,63,94,0.08)]">
             <div className="mb-6">
               <h2 className="text-xl font-bold text-rose-900 dark:text-rose-100">{t('critical')}</h2>
               <p className="text-sm text-rose-700 dark:text-rose-300 mt-1">
@@ -180,7 +181,7 @@ export default function RemindersPage() {
           </section>
 
           {/* Panel de riesgos emergentes */}
-          <section className="rounded-3xl border border-amber-200 bg-amber-50 p-6 dark:border-amber-900 dark:bg-amber-950">
+          <section className="rounded-[2rem] border border-amber-200 bg-[linear-gradient(135deg,#fffbeb,#ffffff)] p-6 shadow-[0_16px_32px_rgba(245,158,11,0.08)]">
             <div className="mb-6">
               <h2 className="text-xl font-bold text-amber-900 dark:text-amber-100">{t('emergingRisks')}</h2>
               <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
@@ -203,7 +204,7 @@ export default function RemindersPage() {
 
       {/* Lista completa de alertas */}
       {alerts.length > 0 && (
-        <section className="rounded-3xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+        <section className="app-panel-strong rounded-[2rem] p-6">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-6">{t('escalationTitle')}</h2>
 
           <div className="space-y-3">

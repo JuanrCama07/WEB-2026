@@ -55,22 +55,23 @@ export default function CalendarPage() {
 
   return (
     <div className="space-y-8">
-      <header className="space-y-3">
-        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white">{t('title')}</h1>
-        <p className="max-w-3xl text-lg text-zinc-600 dark:text-zinc-400">{t('subtitle')}</p>
+      <header className="app-hero rounded-[2rem] px-7 py-8">
+        <p className="app-kicker text-xs font-bold uppercase">Weekly Scheduling</p>
+        <h1 className="mt-3 text-4xl font-black tracking-tight text-zinc-950 md:text-5xl">{t('title')}</h1>
+        <p className="mt-3 max-w-3xl text-lg text-zinc-600">{t('subtitle')}</p>
       </header>
 
       <div className="flex gap-3">
         <a
           href={`/api/google-calendar/connect?locale=es`}
-          className="px-4 py-2 bg-zinc-900 dark:bg-white dark:text-black text-white rounded-lg text-sm font-medium hover:opacity-90"
+          className="rounded-2xl bg-[linear-gradient(135deg,#0f172a,#1e293b)] px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(15,23,42,0.2)] transition hover:brightness-105"
         >
           {t('sync')}
         </a>
       </div>
 
       {thiWeekActivities.length === 0 ? (
-        <section className="rounded-3xl border border-dashed border-zinc-300 bg-white p-10 text-center dark:border-zinc-700 dark:bg-zinc-900">
+        <section className="app-panel-strong rounded-[2rem] border-dashed p-10 text-center">
           <p className="text-xl font-bold text-zinc-900 dark:text-white">Sin tareas esta semana</p>
           <p className="text-zinc-500 dark:text-zinc-400 mt-2">Crea entregas o parciales con fecha de vencimiento para verlos aquí.</p>
         </section>
@@ -82,7 +83,7 @@ export default function CalendarPage() {
               {suggestedDistribution.map((activity) => (
                 <div
                   key={activity.id}
-                  className="p-4 rounded-xl border-2 border-blue-300 bg-blue-50 dark:bg-blue-950 dark:border-blue-800 cursor-move hover:shadow-lg transition-shadow"
+                  className="rounded-[1.5rem] border border-blue-200 bg-[linear-gradient(135deg,#eff6ff,#ffffff)] p-4 shadow-[0_10px_24px_rgba(59,130,246,0.08)] transition-shadow hover:shadow-lg"
                 >
                   <p className="font-semibold text-zinc-900 dark:text-white">{activity.title}</p>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">{activity.course}</p>
@@ -94,7 +95,7 @@ export default function CalendarPage() {
             </div>
           </section>
 
-          <section className="rounded-3xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900 overflow-x-auto">
+          <section className="app-panel-strong overflow-x-auto rounded-[2rem] p-6">
             <div className="grid gap-4" style={{ gridTemplateColumns: `100px repeat(7, 1fr)` }}>
               {/* Header */}
               <div />
@@ -119,7 +120,7 @@ export default function CalendarPage() {
                       <div
                         key={`${hour}-${dayIdx}`}
                         onDragOver={(e) => e.preventDefault()}
-                        className="h-20 border border-zinc-200 dark:border-zinc-700 rounded p-1 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors"
+                        className="h-20 rounded-xl border border-zinc-200 bg-white/70 p-1 transition-colors hover:bg-blue-50"
                       >
                         {dayActivities.length > 0 && (
                           <div className="text-xs bg-blue-500 text-white rounded px-2 py-1 truncate">
@@ -144,7 +145,7 @@ export default function CalendarPage() {
               };
 
               return (
-                <div key={activity.id} className={`rounded-xl border-2 p-4 ${priorityColor[activity.priority]}`}>
+                <div key={activity.id} className={`rounded-[1.5rem] border-2 p-4 shadow-[0_10px_22px_rgba(15,23,42,0.04)] ${priorityColor[activity.priority]}`}>
                   <h3 className="font-semibold text-zinc-900 dark:text-white">{activity.title}</h3>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">{activity.course}</p>
                   <div className="mt-3 flex items-center justify-between text-xs">

@@ -1,12 +1,119 @@
 {
   "Navigation": {
+    "home": "Home",
     "dashboard": "Dashboard",
     "tasks": "My Tasks",
     "calendar": "Planner",
     "subjects": "Subjects",
     "focus": "Focus Mode",
     "habits": "Well-being",
-    "analytics": "My Progress"
+    "analytics": "My Progress",
+    "profile": "My profile",
+    "tools": "Tools",
+    "switchLanguage": "🇨🇴 Cambiar a Español",
+    "signOut": "Sign out",
+    "activeSession": "Active session"
+  },
+  "Auth": {
+    "badge": "Secure access",
+    "title": "Enter ClearUp and run your semester from one place.",
+    "subtitle": "Create an account or sign in to access your dashboard, planner, subjects, and focus tools inside a single workspace.",
+    "tabs": {
+      "signIn": "Sign in",
+      "signUp": "Create account"
+    },
+    "fields": {
+      "name": {
+        "label": "Name",
+        "placeholder": "Your full name"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "you@email.com"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "At least 6 characters"
+      }
+    },
+    "actions": {
+      "signIn": "Sign in",
+      "signUp": "Create account"
+    },
+    "switchToSignIn": "Already have an account? Switch to sign in above.",
+    "switchToSignUp": "Need an account? Switch to create account above.",
+    "helper": "Access your private modules",
+    "demoTitle": "Integrated flow",
+    "demoBody": "Authentication now protects the main modules and keeps your session active so the next visit goes straight to the dashboard."
+  },
+  "Home": {
+    "badge": "Control center",
+    "title": "Hi, {name}. Choose how you want to start today.",
+    "subtitle": "Before jumping into details, use this space as your starting point and go directly to the module you need for the day.",
+    "todayLabel": "Recommended route",
+    "todayTitle": "Start with the big picture, then go deeper.",
+    "todayBody": "Review your overall load, enter your active tasks, and then move into focus mode or weekly planning depending on what is pending.",
+    "featuredTitle": "Core modules",
+    "featuredSubtitle": "High-impact access",
+    "openModule": "Open module",
+    "modules": {
+      "dashboard": {
+        "title": "Overview",
+        "body": "Review your load, progress, priorities, and main recommendation for the day."
+      },
+      "tasks": {
+        "title": "Assignments and exams",
+        "body": "Manage activities, deadlines, reminders, and subtasks from a single place."
+      },
+      "planner": {
+        "title": "Weekly planner",
+        "body": "Distribute your week, detect upcoming deadlines, and reserve useful work blocks."
+      },
+      "subjects": {
+        "title": "Subjects and grades",
+        "body": "Track courses, grade simulations, semester goals, and study resources."
+      }
+    },
+    "quick": {
+      "focus": "Focus mode",
+      "habits": "Well-being",
+      "reminders": "Reminders",
+      "inbox": "Inbox",
+      "ai": "AI assistant",
+      "analytics": "Analytics"
+    },
+    "assistantCard": {
+      "badge": "Smart support",
+      "title": "Ask for help when you are not sure what to do next.",
+      "body": "The assistant can help you prioritize, understand your academic load, and suggest a next step without leaving the platform.",
+      "cta": "Open assistant"
+    }
+  },
+  "Profile": {
+    "badge": "Personal settings",
+    "title": "Manage your profile",
+    "subtitle": "Update your core account information so your workspace stays personalized and consistent across the platform.",
+    "accountTitle": "Active account",
+    "accountBody": "This information is used to identify your session and display your data across the workspace.",
+    "accountSince": "Profile active in ClearUp",
+    "formTitle": "Edit profile",
+    "formBody": "Change your name, email, and password from one place.",
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "password": "New password"
+    },
+    "placeholders": {
+      "name": "Your full name",
+      "email": "you@email.com",
+      "password": "Leave blank if you do not want to change it"
+    },
+    "passwordHelp": "If you do not want to change your password, leave this field blank.",
+    "actions": {
+      "save": "Save changes",
+      "saving": "Saving..."
+    },
+    "success": "Your profile was updated successfully."
   },
   "Subjects": {
     "title": "Subject Management",

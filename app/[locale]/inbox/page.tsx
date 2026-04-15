@@ -1,7 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+
+import { useAuthSession } from '@/lib/auth/client';
+import { getScopedStorageKey } from '@/lib/user-storage';
 
 type IdeaItem = {
   id: string;
@@ -10,29 +13,31 @@ type IdeaItem = {
   converted: boolean;
 };
 
-function loadIdeas(): IdeaItem[] {
+const STORAGE_KEY = 'clearup_ideas';
+
+function loadIdeas(userId?: string): IdeaItem[] {
   if (typeof window === 'undefined') return [];
   try {
-    const stored = window.localStorage.getItem('clearup_ideas');
+    const storageKey = userId ? getScopedStorageKey(STORAGE_KEY, userId) : STORAGE_KEY;
+    const stored = window.localStorage.getItem(storageKey);
     return stored ? JSON.parse(stored) : [];
   } catch {
     return [];
   }
 }
 
-function saveIdeas(ideas: IdeaItem[]) {
+function saveIdeas(ideas: IdeaItem[], userId?: string) {
   if (typeof window === 'undefined') return;
-  window.localStorage.setItem('clearup_ideas', JSON.stringify(ideas));
+  const storageKey = userId ? getScopedStorageKey(STORAGE_KEY, userId) : STORAGE_KEY;
+  window.localStorage.setItem(storageKey, JSON.stringify(ideas));
 }
 
 export default function InboxPage() {
   const t = useTranslations('Inbox');
-  const [ideas, setIdeas] = useState<IdeaItem[]>([]);
+  const session = useAuthSession();
+  const userId = session?.id;
+  const [ideas, setIdeas] = useState<IdeaItem[]>(() => loadIdeas(userId));
   const [input, setInput] = useState('');
-
-  useEffect(() => {
-    setIdeas(loadIdeas());
-  }, []);
 
   const handleAddIdea = () => {
     if (input.trim()) {
@@ -44,7 +49,7 @@ export default function InboxPage() {
       };
       const updated = [...ideas, newIdea];
       setIdeas(updated);
-      saveIdeas(updated);
+      saveIdeas(updated, userId);
       setInput('');
     }
   };
@@ -52,25 +57,26 @@ export default function InboxPage() {
   const handleDeleteIdea = (id: string) => {
     const updated = ideas.filter(idea => idea.id !== id);
     setIdeas(updated);
-    saveIdeas(updated);
+    saveIdeas(updated, userId);
   };
 
   const handleConvertToTask = (idea: IdeaItem) => {
     const updated = ideas.map(i => i.id === idea.id ? { ...i, converted: true } : i);
     setIdeas(updated);
-    saveIdeas(updated);
+    saveIdeas(updated, userId);
   };
 
   const unconverted = ideas.filter(i => !i.converted);
 
   return (
     <div className="space-y-8">
-      <header className="space-y-3">
-        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white">{t('title')}</h1>
-        <p className="max-w-3xl text-lg text-zinc-600 dark:text-zinc-400">{t('subtitle')}</p>
+      <header className="app-hero rounded-[2rem] px-7 py-8">
+        <p className="app-kicker text-xs font-bold uppercase">Capture Layer</p>
+        <h1 className="mt-3 text-4xl font-black tracking-tight text-zinc-950 md:text-5xl">{t('title')}</h1>
+        <p className="mt-3 max-w-3xl text-lg text-zinc-600">{t('subtitle')}</p>
       </header>
 
-      <section className="rounded-3xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+      <section className="app-panel-strong rounded-[2rem] p-6">
         <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-4">{t('quickAdd')}</h2>
         <div className="flex gap-3">
           <input
@@ -79,18 +85,18 @@ export default function InboxPage() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleAddIdea()}
             placeholder={t('placeholder')}
-            className="flex-1 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-4 py-3 text-sm text-zinc-900 dark:text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="app-input flex-1 text-sm"
           />
           <button
             onClick={handleAddIdea}
-            className="rounded-xl bg-blue-600 hover:bg-blue-700 px-6 py-3 font-semibold text-white transition-colors"
+            className="rounded-2xl bg-[linear-gradient(135deg,#0f6cbd,#0b4f8a)] px-6 py-3 font-semibold text-white shadow-[0_14px_30px_rgba(15,108,189,0.2)] transition hover:brightness-105"
           >
             {t('addButton')}
           </button>
         </div>
       </section>
 
-      <section className="rounded-3xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+      <section className="app-panel-strong rounded-[2rem] p-6">
         <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-6">{t('ideas')} ({unconverted.length})</h2>
 
         {unconverted.length === 0 ? (
@@ -101,7 +107,7 @@ export default function InboxPage() {
         ) : (
           <div className="space-y-3">
             {unconverted.map((idea) => (
-              <div key={idea.id} className="rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 p-4">
+              <div key={idea.id} className="rounded-[1.6rem] border border-zinc-200 bg-zinc-50/80 p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1">
                     <p className="font-semibold text-zinc-900 dark:text-white">{idea.title}</p>
@@ -131,7 +137,7 @@ export default function InboxPage() {
       </section>
 
       {ideas.filter(i => i.converted).length > 0 && (
-        <section className="rounded-3xl border border-emerald-200 bg-emerald-50 p-6 dark:border-emerald-900 dark:bg-emerald-950">
+        <section className="rounded-[2rem] border border-emerald-200 bg-[linear-gradient(135deg,#ecfdf5,#ffffff)] p-6 shadow-[0_14px_30px_rgba(16,185,129,0.08)]">
           <h2 className="text-xl font-bold text-emerald-900 dark:text-emerald-100 mb-4">{t('classify')} ({ideas.filter(i => i.converted).length})</h2>
           <p className="text-sm text-emerald-700 dark:text-emerald-300">
             Estas ideas se han convertido en tareas. Ve a &quot;Mis Entregas&quot; para editarlas y clasificarlas completamente.

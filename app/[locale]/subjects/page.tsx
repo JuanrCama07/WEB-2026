@@ -1,7 +1,10 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
+
+import { useAuthSession } from '@/lib/auth/client';
+import { getScopedStorageKey } from '@/lib/user-storage';
 
 type Evaluation = {
   id: string;
@@ -39,13 +42,17 @@ const EMPTY_SUBJECT: Subject = {
   ],
 };
 
-function loadSubjects() {
+const SUBJECTS_STORAGE_KEY = 'clearup_subjects';
+const PROFILE_STORAGE_KEY = 'clearup_profile';
+
+function loadSubjects(userId?: string) {
   if (typeof window === 'undefined') {
     return [];
   }
 
   try {
-    const stored = window.localStorage.getItem('clearup_subjects');
+    const storageKey = userId ? getScopedStorageKey(SUBJECTS_STORAGE_KEY, userId) : SUBJECTS_STORAGE_KEY;
+    const stored = window.localStorage.getItem(storageKey);
     if (!stored) {
       return [];
     }
@@ -57,42 +64,42 @@ function loadSubjects() {
   }
 }
 
-function loadProfile() {
+function emptyProfile(): Profile {
+  return {
+    name: '',
+    semester: '',
+    globalGoal: '',
+  };
+}
+
+function loadProfile(userId?: string) {
   if (typeof window === 'undefined') {
-    return {
-      name: '',
-      semester: '',
-      globalGoal: '',
-    };
+    return emptyProfile();
   }
 
   try {
-    const stored = window.localStorage.getItem('clearup_profile');
+    const storageKey = userId ? getScopedStorageKey(PROFILE_STORAGE_KEY, userId) : PROFILE_STORAGE_KEY;
+    const stored = window.localStorage.getItem(storageKey);
     if (!stored) {
-      return {
-        name: '',
-        semester: '',
-        globalGoal: '',
-      };
+      return emptyProfile();
     }
 
     return JSON.parse(stored) as Profile;
   } catch {
-    return {
-      name: '',
-      semester: '',
-      globalGoal: '',
-    };
+    return emptyProfile();
   }
 }
 
 export default function SubjectsPage() {
   const t = useTranslations('Subjects');
   const tNav = useTranslations('Navigation');
+  const session = useAuthSession();
+  const userId = session?.id;
 
-  const [subjects, setSubjects] = useState<Subject[]>(loadSubjects);
-  const [profile, setProfile] = useState<Profile>(loadProfile);
+  const [subjects, setSubjects] = useState<Subject[]>(() => loadSubjects(userId));
+  const [profile, setProfile] = useState<Profile>(() => loadProfile(userId));
   const [editing, setEditing] = useState<Subject>(EMPTY_SUBJECT);
+  const formSectionRef = useRef<HTMLElement | null>(null);
 
   const totalCredits = useMemo(
     () => subjects.reduce((sum, subject) => sum + (Number.isFinite(subject.credits) ? subject.credits : 0), 0),
@@ -117,14 +124,16 @@ export default function SubjectsPage() {
   function persistSubjects(nextSubjects: Subject[]) {
     setSubjects(nextSubjects);
     if (typeof window !== 'undefined') {
-      window.localStorage.setItem('clearup_subjects', JSON.stringify(nextSubjects));
+      const storageKey = userId ? getScopedStorageKey(SUBJECTS_STORAGE_KEY, userId) : SUBJECTS_STORAGE_KEY;
+      window.localStorage.setItem(storageKey, JSON.stringify(nextSubjects));
     }
   }
 
   function persistProfile(nextProfile: Profile) {
     setProfile(nextProfile);
     if (typeof window !== 'undefined') {
-      window.localStorage.setItem('clearup_profile', JSON.stringify(nextProfile));
+      const storageKey = userId ? getScopedStorageKey(PROFILE_STORAGE_KEY, userId) : PROFILE_STORAGE_KEY;
+      window.localStorage.setItem(storageKey, JSON.stringify(nextProfile));
     }
   }
 
@@ -239,24 +248,37 @@ export default function SubjectsPage() {
     }));
   }
 
+  function openSubjectForm(subject?: Subject) {
+    handleEdit(subject);
+    window.requestAnimationFrame(() => {
+      formSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
   return (
     <div className="space-y-10">
-      <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900">{tNav('subjects')}</h1>
-          <p className="mt-2 text-lg text-zinc-500">{t('intro')}</p>
-        </div>
-        <div className="min-w-[260px] rounded-2xl bg-zinc-900 p-4 text-zinc-50">
-          <p className="mb-1 text-xs font-semibold uppercase tracking-widest opacity-70">
-            {t('profileCard.title')}
-          </p>
-          <p className="truncate font-bold">{profile.name || t('profileCard.defaultName')}</p>
-          <p className="mt-1 text-xs opacity-80">
-            {t('profileCard.semester')} <span className="font-semibold">{profile.semester || t('profileCard.undefined')}</span>
-          </p>
-          <p className="mt-1 text-xs opacity-80">
-            {t('profileCard.goal')} <span className="font-semibold">{profile.globalGoal || t('profileCard.noGoal')}</span>
-          </p>
+      <header className="app-hero rounded-[2rem] px-7 py-8">
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="app-kicker text-xs font-bold uppercase">Academic Planning</p>
+            <h1 className="mt-3 text-4xl font-black tracking-tight text-zinc-950 md:text-5xl">{tNav('subjects')}</h1>
+            <p className="mt-3 max-w-3xl text-lg leading-8 text-zinc-600">{t('intro')}</p>
+          </div>
+          <div className="min-w-[300px] rounded-[1.8rem] border border-white/60 bg-white/85 p-5 shadow-[0_12px_26px_rgba(15,23,42,0.05)] dark:border-zinc-700 dark:bg-zinc-950/60">
+            <p className="mb-1 text-xs font-semibold uppercase tracking-[0.22em] text-zinc-400">
+              {t('profileCard.title')}
+            </p>
+            <p className="truncate text-lg font-bold text-zinc-950">{profile.name || t('profileCard.defaultName')}</p>
+            <p className="mt-2 text-xs text-zinc-500">
+              {t('profileCard.semester')} <span className="font-semibold">{profile.semester || t('profileCard.undefined')}</span>
+            </p>
+            <p className="mt-1 text-xs text-zinc-500">
+              {t('profileCard.goal')} <span className="font-semibold">{profile.globalGoal || t('profileCard.noGoal')}</span>
+            </p>
+            <div className="mt-4 rounded-2xl bg-[rgba(21,122,110,0.08)] px-4 py-3 text-xs font-medium text-[var(--brand)] dark:bg-[rgba(84,194,179,0.12)]">
+              Mantén aquí tus cursos, evaluaciones y meta del semestre en un solo lugar.
+            </div>
+          </div>
         </div>
       </header>
 
@@ -266,11 +288,32 @@ export default function SubjectsPage() {
         <MetricCard label={t('summary.projectedAverage')} value={projectedAverage > 0 ? projectedAverage.toFixed(2) : '0.00'} detail={t('summary.projectedAverageDetail')} />
       </section>
 
+      <section className="app-panel-strong rounded-[2rem] p-6">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+          <div className="max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">Vista guiada</p>
+            <h2 className="mt-2 text-2xl font-black text-zinc-950 dark:text-zinc-100">
+              Organiza tus materias de forma simple
+            </h2>
+            <p className="mt-2 text-sm leading-7 text-zinc-600 dark:text-zinc-300">
+              Primero actualiza tu perfil académico, luego crea cada materia con sus créditos y finalmente agrega evaluaciones con peso y nota para ver tu panorama completo.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => openSubjectForm()}
+            className="rounded-full bg-[linear-gradient(135deg,#157a6e,#115e58)] px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(21,122,110,0.24)] transition hover:brightness-105"
+          >
+            {t('actions.newSubject')}
+          </button>
+        </div>
+      </section>
+
       <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="flex items-center gap-2 text-xl font-bold">
-              <span className="h-6 w-2 rounded-full bg-blue-600" />
+              <span className="h-6 w-2 rounded-full bg-[var(--brand)]" />
               {t('listTitle')}
             </h2>
             <span className="text-xs text-zinc-500">
@@ -279,9 +322,16 @@ export default function SubjectsPage() {
           </div>
 
           {subjects.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 p-8 text-center">
+            <div className="app-panel-strong rounded-[2rem] border border-dashed border-zinc-300 p-8 text-center">
               <h3 className="text-xl font-bold text-zinc-900">{t('empty.title')}</h3>
               <p className="mt-2 text-sm text-zinc-500">{t('empty.body')}</p>
+              <button
+                type="button"
+                onClick={() => openSubjectForm()}
+                className="mt-5 rounded-full bg-[linear-gradient(135deg,#157a6e,#115e58)] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-105"
+              >
+                {t('actions.newSubject')}
+              </button>
             </div>
           ) : (
             <div className="grid gap-4">
@@ -292,30 +342,39 @@ export default function SubjectsPage() {
                 const remainingWeight = Math.max(100 - completedWeight, 0);
 
                 return (
-                  <article key={subject.id} className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+                  <article key={subject.id} className="app-panel-strong rounded-[2rem] p-5">
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <h3 className="text-lg font-bold text-zinc-900">{subject.name}</h3>
-                        <p className="mt-1 text-xs text-zinc-500">
+                        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-300">
                           {subject.credits} {t('summary.creditsLabel')} · {t('simulatorMeta.goal')} {subject.goalGrade.toFixed(1)}
                         </p>
                       </div>
                       <div className="flex gap-2">
                         <button
                           type="button"
-                          onClick={() => handleEdit(subject)}
-                          className="rounded-full border border-zinc-200 px-3 py-1 text-xs text-zinc-600 hover:border-blue-500 hover:text-blue-600"
+                          onClick={() => openSubjectForm(subject)}
+                          className="rounded-full border border-zinc-200 px-3 py-1 text-xs text-zinc-600 transition hover:border-[var(--brand)] hover:text-[var(--brand)] dark:border-zinc-700 dark:text-zinc-200"
                         >
                           {t('actions.edit')}
                         </button>
                         <button
                           type="button"
                           onClick={() => handleDelete(subject.id)}
-                          className="rounded-full border border-red-100 px-3 py-1 text-xs text-red-600 hover:bg-red-50"
+                          className="rounded-full border border-red-100 px-3 py-1 text-xs text-red-600 transition hover:bg-red-50 dark:border-red-900/40 dark:hover:bg-red-950/30"
                         >
                           {t('actions.delete')}
                         </button>
                       </div>
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      <span className="rounded-full bg-[rgba(21,122,110,0.08)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--brand)] dark:bg-[rgba(84,194,179,0.12)]">
+                        {subject.evaluations.length} evaluaciones
+                      </span>
+                      <span className="rounded-full bg-zinc-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:bg-zinc-800 dark:text-zinc-200">
+                        {completedWeight.toFixed(0)}% completado
+                      </span>
                     </div>
 
                     <div className="mt-5 grid gap-3 md:grid-cols-3">
@@ -327,24 +386,27 @@ export default function SubjectsPage() {
                       />
                     </div>
 
-                    <div className="mt-5 rounded-2xl bg-zinc-50 p-4">
-                      <div className="mb-2 flex items-center justify-between text-sm text-zinc-500">
+                    <div className="mt-5 rounded-2xl bg-zinc-50 p-4 dark:bg-zinc-900/70">
+                      <div className="mb-2 flex items-center justify-between text-sm text-zinc-500 dark:text-zinc-300">
                         <span>{t('simulatorMeta.weightCompleted')}</span>
                         <span>{completedWeight.toFixed(0)}% / 100%</span>
                       </div>
-                      <div className="h-3 rounded-full bg-white">
-                        <div className="h-3 rounded-full bg-blue-500" style={{ width: `${Math.min(completedWeight, 100)}%` }} />
+                      <div className="h-3 rounded-full bg-white dark:bg-zinc-800">
+                        <div
+                          className="h-3 rounded-full bg-[linear-gradient(135deg,#157a6e,#115e58)]"
+                          style={{ width: `${Math.min(completedWeight, 100)}%` }}
+                        />
                       </div>
-                      <p className="mt-3 text-xs text-zinc-500">
+                      <p className="mt-3 text-xs text-zinc-500 dark:text-zinc-300">
                         {t('simulatorMeta.remaining')} {remainingWeight.toFixed(0)}%
                       </p>
                     </div>
 
                     <div className="mt-5 space-y-2">
                       {subject.evaluations.map((evaluation) => (
-                        <div key={evaluation.id} className="flex items-center justify-between rounded-2xl bg-zinc-50 px-4 py-3 text-sm">
-                          <span className="font-medium text-zinc-700">{evaluation.name}</span>
-                          <span className="text-zinc-500">
+                        <div key={evaluation.id} className="flex items-center justify-between rounded-2xl bg-zinc-50 px-4 py-3 text-sm dark:bg-zinc-900/70">
+                          <span className="font-medium text-zinc-700 dark:text-zinc-100">{evaluation.name}</span>
+                          <span className="text-zinc-500 dark:text-zinc-300">
                             {evaluation.weight}% · {evaluation.grade === '' ? t('simulatorMeta.pendingGrade') : Number(evaluation.grade).toFixed(1)}
                           </span>
                         </div>
@@ -358,11 +420,14 @@ export default function SubjectsPage() {
         </div>
 
         <div className="space-y-6">
-          <section className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+          <section className="app-panel-strong rounded-[2rem] p-5">
             <h2 className="flex items-center gap-2 text-xl font-bold">
               <span className="h-6 w-2 rounded-full bg-emerald-500" />
               {t('profileSection')}
             </h2>
+            <p className="mt-2 text-sm leading-7 text-zinc-500 dark:text-zinc-300">
+              Completa estos datos para tener un contexto académico más claro dentro de tus materias.
+            </p>
 
             <div className="mt-4 grid gap-3">
               <input
@@ -370,34 +435,34 @@ export default function SubjectsPage() {
                 placeholder={t('profilePlaceholders.name')}
                 value={profile.name}
                 onChange={(event) => persistProfile({ ...profile, name: event.target.value })}
-                className="rounded-lg border border-zinc-200 bg-transparent px-3 py-2 text-sm"
+                className="app-input text-sm"
               />
               <input
                 type="text"
                 placeholder={t('profilePlaceholders.semester')}
                 value={profile.semester}
                 onChange={(event) => persistProfile({ ...profile, semester: event.target.value })}
-                className="rounded-lg border border-zinc-200 bg-transparent px-3 py-2 text-sm"
+                className="app-input text-sm"
               />
               <textarea
                 placeholder={t('profilePlaceholders.goal')}
                 value={profile.globalGoal}
                 onChange={(event) => persistProfile({ ...profile, globalGoal: event.target.value })}
-                className="min-h-[90px] rounded-lg border border-zinc-200 bg-transparent px-3 py-2 text-sm"
+                className="app-input min-h-[110px] resize-none text-sm"
               />
             </div>
           </section>
 
-          <section className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+          <section ref={formSectionRef} className="app-panel-strong rounded-[2rem] p-5">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <h2 className="text-xl font-bold">{editing.id ? t('form.editTitle') : t('form.createTitle')}</h2>
-                <p className="mt-1 text-sm text-zinc-500">{t('form.description')}</p>
+                <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">{editing.id ? t('form.editTitle') : t('form.createTitle')}</h2>
+                <p className="mt-1 text-sm leading-7 text-zinc-500 dark:text-zinc-300">{t('form.description')}</p>
               </div>
               <button
                 type="button"
-                onClick={() => handleEdit()}
-                className="rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700"
+                onClick={() => openSubjectForm()}
+                className="rounded-full bg-[linear-gradient(135deg,#157a6e,#115e58)] px-4 py-2 text-xs font-semibold text-white transition hover:brightness-105"
               >
                 {t('actions.newSubject')}
               </button>
@@ -409,7 +474,7 @@ export default function SubjectsPage() {
                 placeholder={t('form.subjectName')}
                 value={editing.name}
                 onChange={(event) => setEditing((current) => ({ ...current, name: event.target.value }))}
-                className="rounded-lg border border-zinc-200 bg-transparent px-3 py-2 text-sm"
+                className="app-input text-sm"
               />
 
               <div className="grid gap-3 sm:grid-cols-2">
@@ -421,7 +486,7 @@ export default function SubjectsPage() {
                   onChange={(event) =>
                     setEditing((current) => ({ ...current, credits: Number(event.target.value) || 0 }))
                   }
-                  className="rounded-lg border border-zinc-200 bg-transparent px-3 py-2 text-sm"
+                  className="app-input text-sm"
                   placeholder={t('form.credits')}
                 />
                 <input
@@ -433,7 +498,7 @@ export default function SubjectsPage() {
                   onChange={(event) =>
                     setEditing((current) => ({ ...current, goalGrade: Number(event.target.value) || 0 }))
                   }
-                  className="rounded-lg border border-zinc-200 bg-transparent px-3 py-2 text-sm"
+                  className="app-input text-sm"
                   placeholder={t('form.goalGrade')}
                 />
               </div>
@@ -441,52 +506,72 @@ export default function SubjectsPage() {
 
             <div className="mt-6 space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold uppercase tracking-widest text-zinc-500">{t('simulator')}</h3>
+                <h3 className="text-sm font-semibold uppercase tracking-widest text-zinc-500 dark:text-zinc-300">{t('simulator')}</h3>
                 <button
                   type="button"
                   onClick={addEvaluation}
-                  className="rounded-full border border-zinc-200 px-3 py-1 text-xs text-zinc-600 hover:border-blue-500 hover:text-blue-600"
+                  className="rounded-full border border-zinc-200 px-3 py-1 text-xs text-zinc-600 transition hover:border-[var(--brand)] hover:text-[var(--brand)] dark:border-zinc-700 dark:text-zinc-200"
                 >
                   {t('actions.addEvaluation')}
                 </button>
               </div>
 
               {editing.evaluations.map((evaluation) => (
-                <div key={evaluation.id} className="grid gap-2 rounded-2xl border border-zinc-200 p-3">
-                  <div className="grid gap-2 sm:grid-cols-[1.6fr_0.8fr_0.8fr_auto]">
-                    <input
-                      type="text"
-                      placeholder={t('form.evaluationName')}
-                      value={evaluation.name}
-                      onChange={(event) => updateEvaluation(evaluation.id, 'name', event.target.value)}
-                      className="rounded-lg border border-zinc-200 bg-transparent px-3 py-2 text-sm"
-                    />
-                    <input
-                      type="number"
-                      min={0}
-                      max={100}
-                      value={evaluation.weight}
-                      onChange={(event) => updateEvaluation(evaluation.id, 'weight', event.target.value)}
-                      className="rounded-lg border border-zinc-200 bg-transparent px-3 py-2 text-sm"
-                      placeholder={t('form.weight')}
-                    />
-                    <input
-                      type="number"
-                      min={0}
-                      max={5}
-                      step="0.1"
-                      value={evaluation.grade}
-                      onChange={(event) => updateEvaluation(evaluation.id, 'grade', event.target.value)}
-                      className="rounded-lg border border-zinc-200 bg-transparent px-3 py-2 text-sm"
-                      placeholder={t('form.grade')}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeEvaluation(evaluation.id)}
-                      className="rounded-lg border border-red-100 px-3 py-2 text-xs text-red-600 hover:bg-red-50"
-                    >
-                      {t('actions.remove')}
-                    </button>
+                <div key={evaluation.id} className="rounded-2xl border border-zinc-200 p-4 dark:border-zinc-700 dark:bg-zinc-900/40">
+                  <div className="space-y-3">
+                    <label className="block space-y-2">
+                      <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-300">
+                        {t('form.evaluationName')}
+                      </span>
+                      <input
+                        type="text"
+                        placeholder="Ej. Parcial 1"
+                        value={evaluation.name}
+                        onChange={(event) => updateEvaluation(evaluation.id, 'name', event.target.value)}
+                        className="app-input text-sm"
+                      />
+                    </label>
+
+                    <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] sm:items-end">
+                      <label className="block space-y-2">
+                        <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-300">
+                          {t('form.weight')}
+                        </span>
+                        <input
+                          type="number"
+                          min={0}
+                          max={100}
+                          value={evaluation.weight}
+                          onChange={(event) => updateEvaluation(evaluation.id, 'weight', event.target.value)}
+                          className="app-input text-sm"
+                          placeholder={t('form.weight')}
+                        />
+                      </label>
+
+                      <label className="block space-y-2">
+                        <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-300">
+                          {t('form.grade')}
+                        </span>
+                        <input
+                          type="number"
+                          min={0}
+                          max={5}
+                          step="0.1"
+                          value={evaluation.grade}
+                          onChange={(event) => updateEvaluation(evaluation.id, 'grade', event.target.value)}
+                          className="app-input text-sm"
+                          placeholder={t('form.grade')}
+                        />
+                      </label>
+
+                      <button
+                        type="button"
+                        onClick={() => removeEvaluation(evaluation.id)}
+                        className="rounded-lg border border-red-100 px-4 py-3 text-xs font-semibold text-red-600 transition hover:bg-red-50 dark:border-red-900/40 dark:hover:bg-red-950/30"
+                      >
+                        {t('actions.remove')}
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -497,7 +582,7 @@ export default function SubjectsPage() {
                 <button
                   type="button"
                   onClick={() => setEditing(EMPTY_SUBJECT)}
-                  className="rounded-full border border-zinc-200 px-4 py-2 text-xs text-zinc-500 hover:bg-zinc-50"
+                  className="rounded-full border border-zinc-200 px-4 py-2 text-xs text-zinc-500 transition hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-900"
                 >
                   {t('actions.cancel')}
                 </button>
@@ -506,7 +591,7 @@ export default function SubjectsPage() {
                 type="button"
                 onClick={handleSave}
                 disabled={!editing.name.trim()}
-                className="rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-40"
+                className="rounded-full bg-[linear-gradient(135deg,#157a6e,#115e58)] px-4 py-2 text-xs font-semibold text-white transition hover:brightness-105 disabled:opacity-40"
               >
                 {editing.id && subjects.find((subject) => subject.id === editing.id)
                   ? t('actions.saveChanges')
@@ -576,19 +661,19 @@ function MetricCard({
   detail: string;
 }) {
   return (
-    <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-      <p className="text-xs font-bold uppercase tracking-[0.2em] text-zinc-500">{label}</p>
-      <p className="mt-3 text-4xl font-black tracking-tight text-zinc-900">{value}</p>
-      <p className="mt-2 text-sm text-zinc-500">{detail}</p>
+    <div className="app-panel-strong rounded-[1.8rem] p-5">
+      <p className="text-xs font-bold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-300">{label}</p>
+      <p className="mt-3 text-4xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">{value}</p>
+      <p className="mt-2 text-sm leading-6 text-zinc-500 dark:text-zinc-300">{detail}</p>
     </div>
   );
 }
 
 function MiniCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl bg-zinc-50 p-4">
-      <p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-400">{label}</p>
-      <p className="mt-2 text-lg font-bold text-zinc-900">{value}</p>
+    <div className="rounded-2xl bg-zinc-50 p-4 dark:bg-zinc-900/70">
+      <p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-300">{label}</p>
+      <p className="mt-2 text-lg font-bold text-zinc-900 dark:text-zinc-100">{value}</p>
     </div>
   );
 }

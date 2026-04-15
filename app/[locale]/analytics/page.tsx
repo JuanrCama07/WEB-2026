@@ -85,12 +85,13 @@ export default function AnalyticsPage() {
   if (activities.length === 0) {
     return (
       <div className="space-y-8">
-        <header className="space-y-3">
-          <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white">{t('title')}</h1>
-          <p className="max-w-3xl text-lg text-zinc-600 dark:text-zinc-400">{t('subtitle')}</p>
+        <header className="app-hero rounded-[2rem] px-7 py-8">
+          <p className="app-kicker text-xs font-bold uppercase">Performance Snapshot</p>
+          <h1 className="mt-3 text-4xl font-black tracking-tight text-zinc-950">{t('title')}</h1>
+          <p className="mt-3 max-w-3xl text-lg text-zinc-600">{t('subtitle')}</p>
         </header>
 
-        <section className="rounded-3xl border border-dashed border-zinc-300 bg-white p-10 text-center dark:border-zinc-700 dark:bg-zinc-900">
+        <section className="app-panel-strong rounded-[2rem] border-dashed p-10 text-center">
           <p className="text-xl font-bold text-zinc-900 dark:text-white">{t('noData')}</p>
         </section>
       </div>
@@ -99,12 +100,22 @@ export default function AnalyticsPage() {
 
   return (
     <div className="space-y-8">
-      <header className="space-y-3">
-        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-white">{t('title')}</h1>
-        <p className="max-w-3xl text-lg text-zinc-600 dark:text-zinc-400">{t('subtitle')}</p>
+      <header className="app-hero rounded-[2rem] px-7 py-8">
+        <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
+          <div>
+            <p className="app-kicker text-xs font-bold uppercase">Performance Snapshot</p>
+            <h1 className="mt-3 text-4xl font-black tracking-tight text-zinc-950 md:text-5xl">{t('title')}</h1>
+            <p className="mt-3 max-w-3xl text-lg text-zinc-600">{t('subtitle')}</p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <StatPill label={t('completed')} value={String(weekStats.completed)} />
+            <StatPill label={t('pending')} value={String(weekStats.pending)} />
+            <StatPill label={t('avgProgress')} value={`${weekStats.avgProgress}%`} />
+          </div>
+        </div>
       </header>
 
-      <div className={`rounded-3xl border p-6 ${stressColor[stressLevel]}`}>
+      <div className={`rounded-[2rem] border p-6 shadow-[0_18px_40px_rgba(15,23,42,0.06)] ${stressColor[stressLevel]}`}>
         <h2 className="text-2xl font-bold mb-2">{t('stressLevel')}</h2>
         <div className="flex items-center gap-3">
           <div className="text-4xl">
@@ -128,7 +139,7 @@ export default function AnalyticsPage() {
       </div>
 
       <div className="grid gap-6 xl:grid-cols-2">
-        <section className="rounded-3xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+        <section className="app-panel-strong rounded-[2rem] p-6">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-6">{t('weekSummary')}</h2>
 
           <div className="space-y-4">
@@ -156,7 +167,7 @@ export default function AnalyticsPage() {
           </div>
         </section>
 
-        <section className="rounded-3xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+        <section className="app-panel-strong rounded-[2rem] p-6">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-6">{t('monthSummary')}</h2>
 
           <div className="space-y-4">
@@ -184,7 +195,7 @@ export default function AnalyticsPage() {
         </section>
       </div>
 
-      <section className="rounded-3xl border border-violet-200 bg-violet-50 p-6 dark:border-violet-900 dark:bg-violet-950">
+      <section className="rounded-[2rem] border border-violet-200 bg-[linear-gradient(135deg,#f5f3ff,#faf5ff)] p-6 shadow-[0_18px_40px_rgba(139,92,246,0.08)]">
         <h2 className="text-xl font-bold text-violet-900 dark:text-violet-100 mb-3">{t('recommendation')}</h2>
         <p className="text-sm text-violet-700 dark:text-violet-300">
           {stressLevel === 'low'
@@ -211,6 +222,15 @@ function StatRow({ label, value, color }: { label: string; value: string; color:
     <div className="flex items-center justify-between rounded-xl bg-zinc-100 dark:bg-zinc-800 px-4 py-3">
       <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">{label}</span>
       <span className={`px-3 py-1 rounded-lg font-bold ${colors[color]}`}>{value}</span>
+    </div>
+  );
+}
+
+function StatPill({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-[1.4rem] border border-white/60 bg-white/75 px-4 py-4 shadow-[0_10px_24px_rgba(15,23,42,0.05)]">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-zinc-500">{label}</p>
+      <p className="mt-2 text-3xl font-black tracking-tight text-zinc-950">{value}</p>
     </div>
   );
 }

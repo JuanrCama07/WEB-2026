@@ -32,4 +32,3 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.redirect(`${GOOGLE_AUTH_BASE_URL}?${params.toString()}`);
 }
-

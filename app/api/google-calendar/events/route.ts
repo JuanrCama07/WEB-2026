@@ -1,6 +1,8 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
+import { AUTH_SESSION_COOKIE, getGoogleRefreshTokenCookieName, parseCookieJson, type AuthSession } from '@/lib/auth/shared';
+
 type GoogleEvent = {
   id: string;
   summary?: string;
@@ -42,7 +44,16 @@ async function getAccessTokenFromRefreshToken(refreshToken: string) {
 
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
-  const refreshToken = cookieStore.get('gc_refresh_token')?.value;
+  const session = parseCookieJson<AuthSession>(cookieStore.get(AUTH_SESSION_COOKIE)?.value);
+
+  if (!session) {
+    return NextResponse.json(
+      { error: 'No hay sesión activa de ClearUp.' },
+      { status: 401 },
+    );
+  }
+
+  const refreshToken = cookieStore.get(getGoogleRefreshTokenCookieName(session.id))?.value;
 
   if (!refreshToken) {
     return NextResponse.json(
@@ -109,4 +120,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-
