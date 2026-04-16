@@ -89,9 +89,9 @@ export function analyzeStudentContext(activities: Activity[]): StudentContext {
 
 export function getStressEmoji(stressLevel: string): string {
   switch (stressLevel) {
-    case 'critical': return '🚨';
-    case 'high': return '😰';
-    case 'medium': return '😐';
-    default: return '😌';
+    case 'critical': return 'CRT';
+    case 'high': return 'ALT';
+    case 'medium': return 'MED';
+    default: return 'OK';
   }
 }

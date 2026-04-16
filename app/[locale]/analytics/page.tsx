@@ -81,6 +81,12 @@ export default function AnalyticsPage() {
     high: 'bg-amber-50 border-amber-200 text-amber-900 dark:bg-amber-950 dark:border-amber-900 dark:text-amber-100',
     critical: 'bg-rose-50 border-rose-200 text-rose-900 dark:bg-rose-950 dark:border-rose-900 dark:text-rose-100',
   };
+  const stressIndicator = {
+    low: 'OK',
+    medium: 'MED',
+    high: 'ALT',
+    critical: 'CRT',
+  } as const;
 
   if (activities.length === 0) {
     return (
@@ -118,11 +124,8 @@ export default function AnalyticsPage() {
       <div className={`rounded-[2rem] border p-6 shadow-[0_18px_40px_rgba(15,23,42,0.06)] ${stressColor[stressLevel]}`}>
         <h2 className="text-2xl font-bold mb-2">{t('stressLevel')}</h2>
         <div className="flex items-center gap-3">
-          <div className="text-4xl">
-            {stressLevel === 'low' && '😌'}
-            {stressLevel === 'medium' && '😐'}
-            {stressLevel === 'high' && '😰'}
-            {stressLevel === 'critical' && '🚨'}
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-current/15 bg-white/55 text-sm font-black uppercase tracking-[0.18em] shadow-sm dark:bg-black/10">
+            {stressIndicator[stressLevel]}
           </div>
           <div>
             <p className="text-lg font-bold">
@@ -199,12 +202,12 @@ export default function AnalyticsPage() {
         <h2 className="text-xl font-bold text-violet-900 dark:text-violet-100 mb-3">{t('recommendation')}</h2>
         <p className="text-sm text-violet-700 dark:text-violet-300">
           {stressLevel === 'low'
-            ? '✓ Tu carga está bajo control. Mantén el ritmo actual.'
+            ? 'Tu carga está bajo control. Mantén el ritmo actual.'
             : stressLevel === 'medium'
-              ? '⚠ Tienes tareas próximas. Aumenta tu dedicación esta semana.'
+              ? 'Tienes tareas próximas. Aumenta tu dedicación esta semana.'
               : stressLevel === 'high'
-                ? '⚠ Alto estrés detectado. Planifica bloques de trabajo urgentes.'
-                : '🚨 Situación crítica. Actúa inmediatamente en tareas atrasadas.'}
+                ? 'Alto estrés detectado. Planifica bloques de trabajo urgentes.'
+                : 'Situación crítica. Actúa inmediatamente en tareas atrasadas.'}
         </p>
       </section>
     </div>

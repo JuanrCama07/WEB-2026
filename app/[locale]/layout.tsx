@@ -5,6 +5,7 @@ import "../globals.css";
 import { AuthSessionProvider } from '@/lib/auth/client';
 import { readServerSession } from '@/lib/auth/server';
 
+import type { AppIconName } from './app-icon';
 import { SessionShell } from './session-shell';
 
 export default async function RootLayout(props: {
@@ -18,22 +19,22 @@ export default async function RootLayout(props: {
   const session = await readServerSession();
 
   // Definimos los items del menú para que sea fácil de mantener
-  const menuItems = [
-    { name: t('home'), href: '', icon: '🏠' },
-    { name: t('dashboard'), href: 'dashboard', icon: '📊' },
-    { name: t('tasks'), href: 'tasks', icon: '📅' },
-    { name: t('calendar'), href: 'planner', icon: '🗓️' },
-    { name: t('subjects'), href: 'subjects', icon: '📚' },
-    { name: t('focus'), href: 'focus', icon: '⏱️' },
-    { name: t('habits'), href: 'habits', icon: '🌱' },
-    { name: t('analytics'), href: 'analytics', icon: '📈' },
+  const menuItems: { name: string; href: string; icon: AppIconName }[] = [
+    { name: t('home'), href: '', icon: 'home' },
+    { name: t('dashboard'), href: 'dashboard', icon: 'dashboard' },
+    { name: t('tasks'), href: 'tasks', icon: 'tasks' },
+    { name: t('calendar'), href: 'planner', icon: 'planner' },
+    { name: t('subjects'), href: 'subjects', icon: 'subjects' },
+    { name: t('focus'), href: 'focus', icon: 'focus' },
+    { name: t('habits'), href: 'habits', icon: 'habits' },
+    { name: t('analytics'), href: 'analytics', icon: 'analytics' },
   ];
 
-  const additionalItems = [
-    { name: 'Recordatorios', href: 'reminders', icon: '🔔' },
-    { name: 'Inbox', href: 'inbox', icon: '📥' },
-    { name: 'Asistente IA', href: 'ai-assistant', icon: '🤖' },
-    { name: t('profile'), href: 'profile', icon: '👤' },
+  const additionalItems: { name: string; href: string; icon: AppIconName }[] = [
+    { name: 'Recordatorios', href: 'reminders', icon: 'reminders' },
+    { name: 'Inbox', href: 'inbox', icon: 'inbox' },
+    { name: 'Asistente IA', href: 'ai-assistant', icon: 'ai-assistant' },
+    { name: t('profile'), href: 'profile', icon: 'profile' },
   ];
 
   return (

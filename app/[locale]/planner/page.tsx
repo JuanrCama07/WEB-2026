@@ -52,6 +52,11 @@ export default function CalendarPage() {
     const activitiesPerDay = Math.max(1, Math.ceil(thiWeekActivities.length / 5));
     return thiWeekActivities.slice(0, activitiesPerDay * 5);
   }, [thiWeekActivities]);
+  const priorityLabel = {
+    high: 'Alta',
+    medium: 'Media',
+    low: 'Baja',
+  } as const;
 
   return (
     <div className="space-y-8">
@@ -149,7 +154,10 @@ export default function CalendarPage() {
                   <h3 className="font-semibold text-zinc-900 dark:text-white">{activity.title}</h3>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">{activity.course}</p>
                   <div className="mt-3 flex items-center justify-between text-xs">
-                    <span className="font-medium">{activity.priority === 'high' ? '🔴' : activity.priority === 'medium' ? '🟡' : '🟢'} {daysLeft} días</span>
+                    <span className="font-medium uppercase tracking-[0.16em] text-zinc-700 dark:text-zinc-200">
+                      {priorityLabel[activity.priority]}
+                    </span>
+                    <span className="font-medium">{daysLeft} días</span>
                     <span className="font-medium">{activity.progress}%</span>
                   </div>
                   <div className="mt-2 h-2 rounded-full bg-black/10 dark:bg-white/10">

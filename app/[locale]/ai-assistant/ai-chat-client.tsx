@@ -11,7 +11,7 @@ export default function AIChatClient() {
   const [messages, setMessages] = useState<AIResponse[]>([
     {
       id: 'greeting',
-      message: `👋 Hola, soy tu Asistente Académico. Cuéntame cómo puedo ayudarte.`,
+      message: `Hola, soy tu Asistente Académico. Cuéntame cómo puedo ayudarte.`,
       timestamp: new Date(),
       isUser: false,
     },
@@ -111,7 +111,7 @@ export default function AIChatClient() {
                 <div className="h-2 w-2 animate-bounce rounded-full bg-teal-400" style={{ animationDelay: '0.1s' }}></div>
                 <div className="h-2 w-2 animate-bounce rounded-full bg-teal-400" style={{ animationDelay: '0.2s' }}></div>
               </div>
-              <p className="text-xs text-zinc-500 dark:text-zinc-200">Analizando tu contexto academico...</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-200">Analizando tu contexto académico...</p>
             </div>
           </div>
         )}

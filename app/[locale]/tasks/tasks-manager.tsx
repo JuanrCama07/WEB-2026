@@ -597,13 +597,13 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
                           className="flex w-full items-center gap-3 rounded-2xl bg-zinc-50 px-4 py-3 text-left transition hover:bg-zinc-100"
                         >
                           <span
-                            className={`flex h-5 w-5 items-center justify-center rounded-full border text-xs ${
+                            className={`flex h-5 w-5 items-center justify-center rounded-full border ${
                               subtask.done
-                                ? 'border-emerald-500 bg-emerald-500 text-white'
-                                : 'border-zinc-300 text-transparent'
+                                ? 'border-emerald-500 bg-emerald-500'
+                                : 'border-zinc-300 bg-white'
                             }`}
                           >
-                            ✓
+                            <span className={`h-2 w-2 rounded-full ${subtask.done ? 'bg-white' : 'bg-transparent'}`} />
                           </span>
                           <span className={subtask.done ? 'text-zinc-400 line-through' : 'text-zinc-700'}>
                             {subtask.title}

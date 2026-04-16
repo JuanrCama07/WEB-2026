@@ -184,8 +184,18 @@ export default function HabitsPage() {
               className="app-panel-strong flex items-center justify-between rounded-[2rem] p-6"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600">
-                  {todayDone ? '✓' : '•'}
+                <div
+                  className={`flex h-10 w-10 items-center justify-center rounded-full border ${
+                    todayDone
+                      ? 'border-emerald-500 bg-emerald-500'
+                      : 'border-zinc-300 bg-white dark:border-zinc-600 dark:bg-zinc-900'
+                  }`}
+                >
+                  <span
+                    className={`h-3 w-3 rounded-full ${
+                      todayDone ? 'bg-white' : 'bg-zinc-300 dark:bg-zinc-600'
+                    }`}
+                  />
                 </div>
                 <div>
                   <h3 className="font-bold">{habito.name}</h3>

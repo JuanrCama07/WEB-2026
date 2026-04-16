@@ -153,8 +153,8 @@ export default function RemindersPage() {
 
       {alerts.length === 0 ? (
         <section className="rounded-[2rem] border border-dashed border-emerald-300 bg-[linear-gradient(135deg,#ecfdf5,#ffffff)] p-10 text-center">
-          <div className="mx-auto w-16 h-16 rounded-full bg-emerald-200 dark:bg-emerald-900 flex items-center justify-center text-2xl dark:text-emerald-300">
-            ✓
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-emerald-300 bg-emerald-100 text-[11px] font-black uppercase tracking-[0.18em] text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-200">
+            OK
           </div>
           <h2 className="mt-4 text-2xl font-bold text-emerald-900 dark:text-emerald-100">{t('noAlerts')}</h2>
         </section>
