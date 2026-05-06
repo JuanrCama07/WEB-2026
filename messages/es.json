@@ -46,6 +46,77 @@
     "demoTitle": "Flujo integrado",
     "demoBody": "La autenticación protege tus módulos principales y mantiene la sesión activa para que entres directo al dashboard en tu siguiente visita."
   },
+  "Landing": {
+    "nav": {
+      "features": "Funciones",
+      "flow": "Flujo",
+      "start": "Empezar",
+      "signIn": "Iniciar sesión"
+    },
+    "badge": "Organización académica sin fricción",
+    "title": "Tu semestre completo, ordenado antes de que empiece el caos.",
+    "subtitle": "ClearUp centraliza entregas, materias, recordatorios, enfoque y progreso para que sepas qué hacer primero y no pierdas fechas importantes.",
+    "primaryCta": "Entrar a ClearUp",
+    "secondaryCta": "Ver beneficios",
+    "stats": {
+      "modules": {
+        "value": "7+",
+        "label": "módulos conectados"
+      },
+      "flow": {
+        "value": "1",
+        "label": "workspace académico"
+      },
+      "focus": {
+        "value": "24/7",
+        "label": "claridad de pendientes"
+      }
+    },
+    "preview": {
+      "badge": "Vista previa",
+      "title": "Panel inteligente",
+      "metrics": {
+        "0": "avance",
+        "1": "prioridades",
+        "2": "enfoque"
+      },
+      "cardTitle": "Carga semanal",
+      "focusTitle": "Siguiente acción"
+    },
+    "features": {
+      "tasks": {
+        "title": "Entregas bajo control",
+        "body": "Registra trabajos, parciales y proyectos con prioridad, estado, progreso y subtareas."
+      },
+      "planner": {
+        "title": "Planificación realista",
+        "body": "Convierte tus pendientes en bloques de trabajo concretos para la semana."
+      },
+      "focus": {
+        "title": "Modo enfoque",
+        "body": "Trabaja por sesiones y mantén visible lo que realmente necesita atención."
+      },
+      "analytics": {
+        "title": "Progreso visible",
+        "body": "Revisa señales de carga, avance y riesgo antes de que se acumulen los pendientes."
+      }
+    },
+    "steps": {
+      "capture": "Captura pendientes",
+      "plan": "Prioriza la semana",
+      "execute": "Avanza con enfoque"
+    },
+    "flow": {
+      "badge": "Método claro",
+      "title": "Menos pantallas sueltas. Más decisiones útiles.",
+      "body": "La home te explica el valor de la plataforma antes del inicio de sesión; después, el login te lleva directo al dashboard privado para trabajar."
+    },
+    "final": {
+      "badge": "Listo para empezar",
+      "title": "Crea tu cuenta o inicia sesión y empieza a organizar tu semestre desde un solo lugar.",
+      "cta": "Ir al login"
+    }
+  },
   "Home": {
     "badge": "Centro de control",
     "title": "Hola, {name}. Elige cómo quieres empezar hoy.",

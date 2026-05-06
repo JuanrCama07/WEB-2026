@@ -46,6 +46,77 @@
     "demoTitle": "Integrated flow",
     "demoBody": "Authentication now protects the main modules and keeps your session active so the next visit goes straight to the dashboard."
   },
+  "Landing": {
+    "nav": {
+      "features": "Features",
+      "flow": "Flow",
+      "start": "Start",
+      "signIn": "Sign in"
+    },
+    "badge": "Academic organization without friction",
+    "title": "Your whole semester, organized before the chaos starts.",
+    "subtitle": "ClearUp centralizes assignments, subjects, reminders, focus, and progress so you know what to do first and avoid missing important deadlines.",
+    "primaryCta": "Enter ClearUp",
+    "secondaryCta": "See benefits",
+    "stats": {
+      "modules": {
+        "value": "7+",
+        "label": "connected modules"
+      },
+      "flow": {
+        "value": "1",
+        "label": "academic workspace"
+      },
+      "focus": {
+        "value": "24/7",
+        "label": "task clarity"
+      }
+    },
+    "preview": {
+      "badge": "Preview",
+      "title": "Smart dashboard",
+      "metrics": {
+        "0": "progress",
+        "1": "priorities",
+        "2": "focus"
+      },
+      "cardTitle": "Weekly load",
+      "focusTitle": "Next action"
+    },
+    "features": {
+      "tasks": {
+        "title": "Assignments under control",
+        "body": "Track assignments, exams, and projects with priority, status, progress, and subtasks."
+      },
+      "planner": {
+        "title": "Realistic planning",
+        "body": "Turn pending work into concrete work blocks for the week."
+      },
+      "focus": {
+        "title": "Focus mode",
+        "body": "Work in sessions and keep the items that need attention visible."
+      },
+      "analytics": {
+        "title": "Visible progress",
+        "body": "Review load, progress, and risk signals before tasks pile up."
+      }
+    },
+    "steps": {
+      "capture": "Capture tasks",
+      "plan": "Prioritize the week",
+      "execute": "Move with focus"
+    },
+    "flow": {
+      "badge": "Clear method",
+      "title": "Fewer disconnected screens. More useful decisions.",
+      "body": "The home page explains the platform value before sign-in; after login, you go straight to the private dashboard to work."
+    },
+    "final": {
+      "badge": "Ready to start",
+      "title": "Create your account or sign in and start organizing your semester from one place.",
+      "cta": "Go to login"
+    }
+  },
   "Home": {
     "badge": "Control center",
     "title": "Hi, {name}. Choose how you want to start today.",

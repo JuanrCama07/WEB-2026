@@ -46,20 +46,20 @@ export function SessionShell({
   async function handleSignOut() {
     startTransition(async () => {
       await fetch('/api/auth/sign-out', { method: 'POST' });
-      router.replace(`/${locale}/sign-in`);
+      router.replace(`/${locale}`);
       router.refresh();
     });
   }
 
-  if (isAuthPage) {
-    return <main className="min-h-screen">{children}</main>;
+  if (isAuthPage || !session) {
+    return <main className="min-h-screen w-full">{children}</main>;
   }
 
   return (
     <>
       <nav className="app-panel m-4 flex w-76 flex-col gap-7 rounded-[2.2rem] px-6 py-7 text-zinc-900">
         <div className="space-y-5">
-          <Link href={`/${locale}`} className="flex items-center gap-3 rounded-2xl outline-none transition hover:opacity-90 focus-visible:ring-2 focus-visible:ring-[var(--brand)] focus-visible:ring-offset-2">
+          <Link href={`/${locale}/dashboard`} className="flex items-center gap-3 rounded-2xl outline-none transition hover:opacity-90 focus-visible:ring-2 focus-visible:ring-[var(--brand)] focus-visible:ring-offset-2">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#157a6e,#115e58)] text-xl font-black text-white shadow-[0_14px_34px_rgba(21,122,110,0.24)]">
               C
             </div>

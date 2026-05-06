@@ -20,7 +20,6 @@ export default async function RootLayout(props: {
 
   // Definimos los items del menú para que sea fácil de mantener
   const menuItems: { name: string; href: string; icon: AppIconName }[] = [
-    { name: t('home'), href: '', icon: 'home' },
     { name: t('dashboard'), href: 'dashboard', icon: 'dashboard' },
     { name: t('tasks'), href: 'tasks', icon: 'tasks' },
     { name: t('calendar'), href: 'planner', icon: 'planner' },
@@ -38,7 +37,7 @@ export default async function RootLayout(props: {
   ];
 
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
       <body className="app-shell flex min-h-screen text-zinc-900 dark:text-zinc-100 font-sans">
         <script
           dangerouslySetInnerHTML={{

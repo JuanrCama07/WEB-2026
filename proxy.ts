@@ -35,7 +35,7 @@ export default function proxy(request: NextRequest) {
   }
 
   if (locale && isSignInRoute && hasSession) {
-    return NextResponse.redirect(new URL(`/${locale}`, request.url));
+    return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url));
   }
 
   return handleI18nRouting(request);

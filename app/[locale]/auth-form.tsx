@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 type AuthCopy = {
@@ -53,7 +54,7 @@ export function AuthForm({ locale, copy }: { locale: string; copy: AuthCopy }) {
         return;
       }
 
-      router.replace(`/${locale}`);
+      router.replace(`/${locale}/dashboard`);
       router.refresh();
     });
   }
@@ -64,6 +65,14 @@ export function AuthForm({ locale, copy }: { locale: string; copy: AuthCopy }) {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(21,122,110,0.12),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(56,189,248,0.16),transparent_28%)]" />
         <div className="relative mx-auto flex h-full max-w-xl flex-col justify-between">
           <div className="space-y-6">
+            <Link
+              href={`/${locale}`}
+              className="inline-flex items-center gap-2 rounded-2xl border border-[var(--line)] bg-white/85 px-4 py-3 text-xs font-black uppercase tracking-[0.18em] text-[var(--brand)] shadow-[0_14px_30px_rgba(14,42,51,0.08)] backdrop-blur transition hover:-translate-y-0.5 hover:bg-white focus-visible:ring-2 focus-visible:ring-[var(--brand)] focus-visible:ring-offset-2"
+            >
+              <span aria-hidden="true">←</span>
+              Volver al inicio
+            </Link>
+
             <span className="inline-flex rounded-full border border-[rgba(21,122,110,0.18)] bg-white/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-[var(--brand)] shadow-[0_10px_24px_rgba(21,122,110,0.08)]">
               {copy.badge}
             </span>
@@ -97,6 +106,10 @@ export function AuthForm({ locale, copy }: { locale: string; copy: AuthCopy }) {
               <p className="mt-3 text-sm leading-6 text-zinc-600">{copy.demoBody}</p>
             </div>
           </div>
+
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+            © 2026 Web designers group1
+          </p>
         </div>
       </section>
 
