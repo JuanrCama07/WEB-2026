@@ -111,6 +111,25 @@
       "title": "Fewer disconnected screens. More useful decisions.",
       "body": "The home page explains the platform value before sign-in; after login, you go straight to the private dashboard to work."
     },
+    "accordion": {
+      "badge": "Quick questions",
+      "title": "What ClearUp does for your semester.",
+      "body": "An interactive accordion summarizes the key benefits so users quickly understand why they should enter the platform.",
+      "items": {
+        "priority": {
+          "title": "How does it help me prioritize?",
+          "body": "It brings assignments, dates, and progress together so you can identify the most urgent activity before starting work."
+        },
+        "focus": {
+          "title": "What happens when I have too many tasks?",
+          "body": "You can turn academic load into a clear sequence: capture, plan, and move forward with focus sessions."
+        },
+        "progress": {
+          "title": "Can I see my progress?",
+          "body": "The dashboard and analytics show progress, risk, and weekly load signals so you can make better decisions."
+        }
+      }
+    },
     "final": {
       "badge": "Ready to start",
       "title": "Create your account or sign in and start organizing your semester from one place.",
@@ -330,7 +349,19 @@
       "riskLevel": "Risk level",
       "suggestedAction": "Suggested action",
       "smartRule": "Applied smart rule",
-      "noActivities": "You have not added activities yet. Create an assignment, exam, or project to get started."
+      "noActivities": "You have not added activities yet. Create an assignment, exam, or project to get started.",
+      "basicInfo": "Main details",
+      "planningInfo": "Priority and progress",
+      "subtasksInfo": "Subtasks",
+      "emptyHint": "Start by completing the form on the left",
+      "listEyebrow": "List",
+      "guideTitle": "Guided path",
+      "chooseType": "Choose type",
+      "choosePriority": "Choose priority",
+      "chooseStatus": "Choose status",
+      "previewTitle": "Live preview",
+      "previewEmpty": "Your activity will appear here",
+      "autoProgressHelp": "Progress is calculated automatically from completed subtasks."
     },
     "escalation": {
       "low": "Low",

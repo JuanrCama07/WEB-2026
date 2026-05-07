@@ -111,6 +111,25 @@
       "title": "Menos pantallas sueltas. Más decisiones útiles.",
       "body": "La home te explica el valor de la plataforma antes del inicio de sesión; después, el login te lleva directo al dashboard privado para trabajar."
     },
+    "accordion": {
+      "badge": "Preguntas rápidas",
+      "title": "Lo que ClearUp hace por tu semestre.",
+      "body": "Un acordeón interactivo resume los beneficios clave para que el usuario entienda rápido por qué entrar a la plataforma.",
+      "items": {
+        "priority": {
+          "title": "¿Cómo me ayuda a priorizar?",
+          "body": "Reúne entregas, fechas y progreso para que identifiques qué actividad tiene más urgencia antes de empezar a trabajar."
+        },
+        "focus": {
+          "title": "¿Qué pasa cuando tengo muchos pendientes?",
+          "body": "Puedes convertir la carga académica en una secuencia clara: capturar, planear y avanzar con sesiones de enfoque."
+        },
+        "progress": {
+          "title": "¿Puedo ver mi avance?",
+          "body": "El dashboard y la analítica muestran señales de progreso, riesgo y carga semanal para tomar mejores decisiones."
+        }
+      }
+    },
     "final": {
       "badge": "Listo para empezar",
       "title": "Crea tu cuenta o inicia sesión y empieza a organizar tu semestre desde un solo lugar.",
@@ -331,7 +350,19 @@
       "riskLevel": "Nivel de riesgo",
       "suggestedAction": "Acción sugerida",
       "smartRule": "Regla inteligente aplicada",
-      "noActivities": "Aún no has registrado actividades. Crea una entrega, parcial o proyecto para comenzar."
+      "noActivities": "Aún no has registrado actividades. Crea una entrega, parcial o proyecto para comenzar.",
+      "basicInfo": "Datos principales",
+      "planningInfo": "Prioridad y avance",
+      "subtasksInfo": "Subtareas",
+      "emptyHint": "Empieza completando el formulario de la izquierda",
+      "listEyebrow": "Lista",
+      "guideTitle": "Ruta guiada",
+      "chooseType": "Elige el tipo",
+      "choosePriority": "Elige la prioridad",
+      "chooseStatus": "Elige el estado",
+      "previewTitle": "Vista previa en vivo",
+      "previewEmpty": "Tu actividad aparecerá aquí",
+      "autoProgressHelp": "El avance se calcula automáticamente con las subtareas completadas."
     },
     "escalation": {
       "low": "Bajo",

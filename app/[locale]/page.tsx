@@ -6,6 +6,7 @@ import { getTranslations } from 'next-intl/server';
 import { readServerSession } from '@/lib/auth/server';
 
 import { AppIcon, type AppIconName } from './app-icon';
+import { LandingAccordion, ScrollReveal } from './landing-effects';
 import { LandingNav } from './landing-nav';
 
 export default async function Home(props: {
@@ -39,6 +40,12 @@ export default async function Home(props: {
     t('steps.execute'),
   ];
 
+  const accordionItems = [
+    { title: t('accordion.items.priority.title'), body: t('accordion.items.priority.body') },
+    { title: t('accordion.items.focus.title'), body: t('accordion.items.focus.body') },
+    { title: t('accordion.items.progress.title'), body: t('accordion.items.progress.body') },
+  ];
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#f3f7f7] text-zinc-950">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_12%,rgba(21,122,110,0.18),transparent_24rem),radial-gradient(circle_at_86%_18%,rgba(56,189,248,0.18),transparent_24rem),linear-gradient(180deg,rgba(255,255,255,0.92),rgba(237,247,247,0.96))]" />
@@ -57,7 +64,7 @@ export default async function Home(props: {
 
         <main className="flex flex-1 flex-col">
           <section className="grid flex-1 items-center gap-12 py-16 lg:grid-cols-[1.02fr_0.98fr] lg:py-20">
-            <div>
+            <ScrollReveal>
               <p className="inline-flex rounded-full border border-[rgba(21,122,110,0.18)] bg-white/78 px-4 py-2 text-xs font-black uppercase tracking-[0.3em] text-[var(--brand)] shadow-[0_12px_30px_rgba(21,122,110,0.08)]">
                 {t('badge')}
               </p>
@@ -91,12 +98,12 @@ export default async function Home(props: {
                   </div>
                 ))}
               </div>
-            </div>
+            </ScrollReveal>
 
-            <div className="relative">
+            <ScrollReveal className="relative" delay={160} variant="right">
               <div className="absolute -left-6 top-10 h-28 w-28 rounded-[2rem] bg-[#157a6e]/15 blur-2xl" />
               <div className="absolute -right-4 bottom-10 h-32 w-32 rounded-full bg-sky-300/25 blur-2xl" />
-              <div className="relative rounded-[2.4rem] border border-white/90 bg-white/78 p-4 shadow-[0_30px_80px_rgba(14,42,51,0.14)] backdrop-blur-xl">
+              <div className="relative rounded-[2.4rem] border border-white/90 bg-white/78 p-4 shadow-[0_30px_80px_rgba(14,42,51,0.14)] backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:shadow-[0_38px_90px_rgba(14,42,51,0.18)]">
                 <div className="rounded-[2rem] bg-[linear-gradient(145deg,#0d2c33,#134a45_55%,#eaf8f6_55%,#ffffff)] p-5">
                   <div className="flex items-center justify-between">
                     <div>
@@ -147,22 +154,25 @@ export default async function Home(props: {
                   </div>
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
           </section>
 
           <section id="features" className="grid gap-4 pb-12 md:grid-cols-2 xl:grid-cols-4">
-            {features.map((feature) => (
-              <article key={feature.title} className="group rounded-[2rem] border border-white/85 bg-white/72 p-6 shadow-[0_18px_45px_rgba(14,42,51,0.07)] backdrop-blur transition hover:-translate-y-1 hover:bg-white">
+            {features.map((feature, index) => (
+              <ScrollReveal key={feature.title} delay={index * 90}>
+                <article className="group h-full rounded-[2rem] border border-white/85 bg-white/72 p-6 shadow-[0_18px_45px_rgba(14,42,51,0.07)] backdrop-blur transition hover:-translate-y-1 hover:bg-white">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[rgba(21,122,110,0.1)] text-[var(--brand)] transition group-hover:scale-105">
                   <AppIcon name={feature.icon} className="h-6 w-6" />
                 </div>
                 <h3 className="mt-5 text-xl font-black tracking-tight text-zinc-950">{feature.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-zinc-600">{feature.body}</p>
-              </article>
+                </article>
+              </ScrollReveal>
             ))}
           </section>
 
-          <section id="flow" className="pb-14">
+          <ScrollReveal className="pb-14" variant="left">
+            <section id="flow">
             <div className="rounded-[2.4rem] border border-white/80 bg-[linear-gradient(135deg,rgba(255,255,255,0.82),rgba(232,248,244,0.86))] p-7 shadow-[0_24px_70px_rgba(14,42,51,0.08)] backdrop-blur">
               <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
                 <div>
@@ -180,9 +190,18 @@ export default async function Home(props: {
                 </div>
               </div>
             </div>
-          </section>
+            </section>
+          </ScrollReveal>
 
-          <section id="start" className="pb-10">
+          <LandingAccordion
+            badge={t('accordion.badge')}
+            title={t('accordion.title')}
+            body={t('accordion.body')}
+            items={accordionItems}
+          />
+
+          <ScrollReveal className="pb-10" variant="zoom">
+            <section id="start">
             <div className="overflow-hidden rounded-[2.4rem] bg-[linear-gradient(135deg,#102f36,#115e58)] p-8 text-white shadow-[0_28px_70px_rgba(17,94,88,0.22)] md:p-10">
               <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                 <div>
@@ -197,7 +216,8 @@ export default async function Home(props: {
                 </Link>
               </div>
             </div>
-          </section>
+            </section>
+          </ScrollReveal>
 
           <p className="pb-6 text-center text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
             © 2026 Web designers group1
