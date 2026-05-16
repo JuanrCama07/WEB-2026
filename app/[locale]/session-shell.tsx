@@ -89,9 +89,15 @@ export function SessionShell({
     return <main className="min-h-screen w-full">{children}</main>;
   }
 
+  const allItems = [...menuItems, ...additionalItems];
+  const mobilePrimaryItems = [
+    ...menuItems.slice(0, 4),
+    additionalItems.find((item) => item.href === 'profile'),
+  ].filter(Boolean) as MenuItem[];
+
   return (
-    <>
-      <nav className="app-panel m-4 flex w-76 flex-col gap-7 rounded-[2.2rem] px-6 py-7 text-zinc-900">
+    <div className="flex min-h-screen w-full flex-col lg:flex-row">
+      <nav className="hidden app-panel m-4 w-76 flex-col gap-7 rounded-[2.2rem] px-6 py-7 text-zinc-900 lg:flex">
         <div className="space-y-5">
           <Link href={`/${locale}/dashboard`} className="flex items-center gap-3 rounded-2xl outline-none transition hover:opacity-90 focus-visible:ring-2 focus-visible:ring-[var(--brand)] focus-visible:ring-offset-2">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#157a6e,#115e58)] text-xl font-black text-white shadow-[0_14px_34px_rgba(21,122,110,0.24)]">
@@ -189,18 +195,71 @@ export function SessionShell({
         </div>
       </nav>
 
-      <main className="min-w-0 flex-1 overflow-y-auto p-4 md:p-6 xl:p-7">
-        <div className="app-panel rounded-[2.2rem] px-5 py-5 md:px-7 md:py-6">
-          <header className="mb-8 flex flex-col gap-4 border-b border-zinc-200/70 pb-5 md:flex-row md:items-center md:justify-between">
+      <div className="sticky top-0 z-30 border-b border-[var(--line)] bg-[rgba(243,247,247,0.92)] px-3 py-3 backdrop-blur lg:hidden">
+        <div className="flex items-center justify-between gap-3">
+          <Link
+            href={`/${locale}/dashboard`}
+            className="flex min-w-0 items-center gap-3 rounded-2xl bg-white/80 px-3 py-2 shadow-[0_10px_24px_rgba(14,42,51,0.06)]"
+          >
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#157a6e,#115e58)] text-sm font-black text-white">
+              C
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-lg font-black tracking-tight text-[var(--brand)]">ClearUp</p>
+              <p className="truncate text-[10px] font-medium uppercase tracking-[0.24em] text-[var(--muted)]">Student OS</p>
+            </div>
+          </Link>
+
+          <Link
+            href={`/${locale}/profile`}
+            className="flex min-w-0 items-center gap-2 rounded-2xl border border-[var(--line)] bg-white/80 px-3 py-2"
+          >
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#157a6e,#115e58)] text-sm font-bold text-white">
+              {(session?.name ?? 'C').slice(0, 1).toUpperCase()}
+            </div>
+            <div className="hidden min-w-0 sm:block">
+              <p className="truncate text-sm font-semibold text-zinc-950">{session?.name ?? 'ClearUp'}</p>
+              <p className="truncate text-xs text-[var(--muted)]">{session?.email ?? 'Workspace ready'}</p>
+            </div>
+          </Link>
+        </div>
+
+        <div className="-mx-3 mt-3 overflow-x-auto px-3">
+          <div className="flex min-w-max gap-2 pb-1">
+            {allItems.map((item) => {
+              const isActive = currentSection === item.href;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={`/${locale}/${item.href}`}
+                  className={`inline-flex items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium whitespace-nowrap transition ${
+                    isActive
+                      ? 'bg-[linear-gradient(135deg,#157a6e,#115e58)] text-white shadow-[0_12px_24px_rgba(21,122,110,0.18)]'
+                      : 'border border-[var(--line)] bg-white/85 text-[var(--muted)]'
+                  }`}
+                >
+                  <AppIcon name={item.icon} className="h-[16px] w-[16px]" />
+                  <span>{item.name}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      <main className="min-w-0 flex-1 overflow-y-auto px-3 pb-24 pt-3 md:px-4 lg:p-4 xl:p-7">
+        <div className="app-panel rounded-[1.8rem] px-4 py-4 sm:rounded-[2.2rem] sm:px-5 sm:py-5 md:px-7 md:py-6">
+          <header className="mb-6 flex flex-col gap-4 border-b border-zinc-200/70 pb-5 md:mb-8 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--muted)]">Workspace</p>
-              <h2 className="mt-2 text-2xl font-black tracking-tight text-zinc-950">
+              <h2 className="mt-2 text-2xl font-black tracking-tight text-zinc-950 sm:text-3xl">
                 {[...menuItems, ...additionalItems].find((item) => item.href === currentSection)?.name ?? 'ClearUp'}
               </h2>
             </div>
             <Link
               href={`/${locale}/profile`}
-              className="flex items-center gap-3 rounded-2xl border border-[var(--line)] bg-white/85 px-4 py-3 transition hover:bg-white focus-visible:ring-2 focus-visible:ring-[var(--brand)] focus-visible:ring-offset-2"
+              className="hidden items-center gap-3 rounded-2xl border border-[var(--line)] bg-white/85 px-4 py-3 transition hover:bg-white focus-visible:ring-2 focus-visible:ring-[var(--brand)] focus-visible:ring-offset-2 md:flex"
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#157a6e,#115e58)] text-sm font-bold text-white">
                 {(session?.name ?? 'C').slice(0, 1).toUpperCase()}
@@ -214,6 +273,29 @@ export function SessionShell({
           <div className="mx-auto max-w-6xl">{children}</div>
         </div>
       </main>
-    </>
+
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--line)] bg-[rgba(243,247,247,0.94)] px-3 py-3 backdrop-blur lg:hidden">
+        <div className="grid grid-cols-5 gap-2">
+          {mobilePrimaryItems.map((item) => {
+            const isActive = currentSection === item.href;
+
+            return (
+              <Link
+                key={item.href}
+                href={`/${locale}/${item.href}`}
+                className={`flex flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-semibold transition ${
+                  isActive
+                    ? 'bg-[linear-gradient(135deg,#157a6e,#115e58)] text-white shadow-[0_12px_24px_rgba(21,122,110,0.16)]'
+                    : 'bg-white/80 text-[var(--muted)]'
+                }`}
+              >
+                <AppIcon name={item.icon} className="h-[18px] w-[18px]" />
+                <span className="truncate">{item.name}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 }
