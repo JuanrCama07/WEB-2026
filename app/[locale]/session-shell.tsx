@@ -1,9 +1,11 @@
 "use client";
 
-import { useTransition } from 'react';
+import { useEffect, useTransition } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
+import { buildApiUrl } from '@/lib/api';
+import { clearClientSession } from '@/lib/auth/client';
 import type { AuthSession } from '@/lib/auth/shared';
 
 import { AppIcon, type AppIconName } from './app-icon';
@@ -21,6 +23,21 @@ type SessionShellCopy = {
   signOut: string;
   guest: string;
 };
+
+const PRIVATE_ROUTES = new Set([
+  'dashboard',
+  'tasks',
+  'planner',
+  'subjects',
+  'focus',
+  'habits',
+  'analytics',
+  'reminders',
+  'inbox',
+  'ai-assistant',
+  'calendar',
+  'profile',
+]);
 
 export function SessionShell({
   children,
@@ -42,13 +59,30 @@ export function SessionShell({
   const [isPending, startTransition] = useTransition();
   const isAuthPage = pathname === `/${locale}/sign-in`;
   const currentSection = pathname.replace(`/${locale}/`, '').split('/')[0];
+  const isPrivateRoute = PRIVATE_ROUTES.has(currentSection);
+
+  useEffect(() => {
+    if (!session && isPrivateRoute) {
+      router.replace(`/${locale}/sign-in`);
+      return;
+    }
+
+    if (session && isAuthPage) {
+      router.replace(`/${locale}/dashboard`);
+    }
+  }, [isAuthPage, isPrivateRoute, locale, router, session]);
 
   async function handleSignOut() {
     startTransition(async () => {
-      await fetch('/api/auth/sign-out', { method: 'POST' });
+      await fetch(buildApiUrl('/api/auth/sign-out'), { method: 'POST', credentials: 'include' });
+      clearClientSession();
       router.replace(`/${locale}`);
       router.refresh();
     });
+  }
+
+  if ((isPrivateRoute && !session) || (isAuthPage && session)) {
+    return null;
   }
 
   if (isAuthPage || !session) {

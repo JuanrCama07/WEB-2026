@@ -4,9 +4,13 @@ import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useStoredActivities } from '@/lib/activities-store';
 
-const today = new Date('2026-03-18T00:00:00');
+function getToday() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today;
+}
 
-function getDaysLeft(dueDate: string): number {
+function getDaysLeft(dueDate: string, today: Date): number {
   const due = new Date(dueDate);
   const diff = due.getTime() - today.getTime();
   return Math.ceil(diff / (1000 * 60 * 60 * 24));
@@ -31,15 +35,16 @@ function isInPeriod(date: string, periodStart: Date, periodEnd: Date): boolean {
 export default function AnalyticsPage() {
   const t = useTranslations('Analytics');
   const activities = useStoredActivities();
+  const today = useMemo(() => getToday(), []);
 
-  const weekStart = useMemo(() => getWeekStart(today), []);
+  const weekStart = useMemo(() => getWeekStart(today), [today]);
   const weekEnd = useMemo(() => new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000), [weekStart]);
-  const monthStart = useMemo(() => getMonthStart(today), []);
-  const monthEnd = useMemo(() => new Date(today.getFullYear(), today.getMonth() + 1, 0), []);
+  const monthStart = useMemo(() => getMonthStart(today), [today]);
+  const monthEnd = useMemo(() => new Date(today.getFullYear(), today.getMonth() + 1, 0), [today]);
 
   const weekStats = useMemo(() => {
     const completed = activities.filter(a => a.status === 'completed' && isInPeriod(a.dueDate, weekStart, weekEnd)).length;
-    const pending = activities.filter(a => a.status !== 'completed' && getDaysLeft(a.dueDate) >= 0 && isInPeriod(a.dueDate, weekStart, weekEnd)).length;
+    const pending = activities.filter(a => a.status !== 'completed' && getDaysLeft(a.dueDate, today) >= 0 && isInPeriod(a.dueDate, weekStart, weekEnd)).length;
     const avgProgress = activities.length === 0 ? 0 : Math.round(activities.reduce((sum, a) => sum + a.progress, 0) / activities.length);
 
     const byPriority = {
@@ -55,25 +60,25 @@ export default function AnalyticsPage() {
     };
 
     return { completed, pending, avgProgress, byPriority, byType };
-  }, [activities, weekStart, weekEnd]);
+  }, [activities, today, weekStart, weekEnd]);
 
   const monthStats = useMemo(() => {
     const completed = activities.filter(a => a.status === 'completed' && isInPeriod(a.dueDate, monthStart, monthEnd)).length;
-    const pending = activities.filter(a => a.status !== 'completed' && getDaysLeft(a.dueDate) >= 0 && isInPeriod(a.dueDate, monthStart, monthEnd)).length;
+    const pending = activities.filter(a => a.status !== 'completed' && getDaysLeft(a.dueDate, today) >= 0 && isInPeriod(a.dueDate, monthStart, monthEnd)).length;
 
     return { completed, pending };
-  }, [activities, monthStart, monthEnd]);
+  }, [activities, monthStart, monthEnd, today]);
 
   const stressLevel = useMemo(() => {
-    const overdue = activities.filter(a => a.status !== 'completed' && getDaysLeft(a.dueDate) < 0).length;
-    const dueThisWeek = activities.filter(a => a.status !== 'completed' && getDaysLeft(a.dueDate) >= 0 && getDaysLeft(a.dueDate) <= 7).length;
+    const overdue = activities.filter(a => a.status !== 'completed' && getDaysLeft(a.dueDate, today) < 0).length;
+    const dueThisWeek = activities.filter(a => a.status !== 'completed' && getDaysLeft(a.dueDate, today) >= 0 && getDaysLeft(a.dueDate, today) <= 7).length;
     const avgProgress = activities.length === 0 ? 0 : Math.round(activities.reduce((sum, a) => sum + a.progress, 0) / activities.length);
 
     if (overdue > 0 || (dueThisWeek > 2 && avgProgress < 30)) return 'critical';
     if (dueThisWeek > 0 && avgProgress < 50) return 'high';
     if (dueThisWeek > 0) return 'medium';
     return 'low';
-  }, [activities]);
+  }, [activities, today]);
 
   const stressColor = {
     low: 'bg-emerald-50 border-emerald-200 text-emerald-900 dark:bg-emerald-950 dark:border-emerald-900 dark:text-emerald-100',

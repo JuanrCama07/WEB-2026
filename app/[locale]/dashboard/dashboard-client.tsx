@@ -15,19 +15,24 @@ type DashboardCopy = {
   insights: Record<'completed' | 'avgProgress' | 'focusBlocks' | 'signalPrefix', string>;
 };
 
-const today = new Date('2026-03-18T00:00:00');
+function getToday() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today;
+}
 
 export function DashboardClient({ copy }: { copy: DashboardCopy }) {
   const activities = useStoredActivities();
+  const today = useMemo(() => getToday(), []);
 
   const summary = useMemo(() => {
     const dueSoon = activities.filter((activity) => {
-      const daysLeft = getDaysLeft(activity.dueDate);
+      const daysLeft = getDaysLeft(activity.dueDate, today);
       return daysLeft >= 0 && daysLeft <= 7 && activity.status !== 'completed';
     }).length;
 
     const completed = activities.filter((activity) => activity.status === 'completed').length;
-    const critical = activities.filter((activity) => getUrgency(activity) === 'critical').length;
+    const critical = activities.filter((activity) => getUrgency(activity, today) === 'critical').length;
     const averageProgress =
       activities.length === 0
         ? 0
@@ -40,13 +45,13 @@ export function DashboardClient({ copy }: { copy: DashboardCopy }) {
       critical,
       completed,
     };
-  }, [activities]);
+  }, [activities, today]);
 
   const focusItems = useMemo(() => {
     return [...activities]
-      .sort((left, right) => urgencyScore(getUrgency(right)) - urgencyScore(getUrgency(left)))
+      .sort((left, right) => urgencyScore(getUrgency(right, today)) - urgencyScore(getUrgency(left, today)))
       .slice(0, 4);
-  }, [activities]);
+  }, [activities, today]);
 
   const distribution = useMemo(() => {
     return [
@@ -102,7 +107,7 @@ export function DashboardClient({ copy }: { copy: DashboardCopy }) {
 
             <div className="mt-6 grid gap-4">
               {focusItems.map((item) => {
-                const urgency = getUrgency(item);
+                const urgency = getUrgency(item, today);
 
                 return (
                   <div key={item.id} className="rounded-[1.75rem] border border-zinc-200/80 bg-[linear-gradient(180deg,#ffffff,#f8fafc)] p-5 shadow-[0_10px_24px_rgba(15,23,42,0.05)]">
@@ -241,13 +246,13 @@ function UrgencyBadge({
   return <span className={`rounded-full px-3 py-1 text-xs font-semibold ${className}`}>{label}</span>;
 }
 
-function getDaysLeft(dueDate: string) {
+function getDaysLeft(dueDate: string, today: Date) {
   const due = new Date(`${dueDate}T00:00:00`);
   return Math.ceil((due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 }
 
-function getUrgency(activity: Activity) {
-  const daysLeft = getDaysLeft(activity.dueDate);
+function getUrgency(activity: Activity, today: Date) {
+  const daysLeft = getDaysLeft(activity.dueDate, today);
 
   if (daysLeft <= 1 && activity.status !== 'completed') {
     return 'critical' as const;

@@ -1,5 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
+import { buildApiUrl } from '@/lib/api';
+
 type Props = {
   params: Promise<{ locale: string }>;
 };
@@ -20,7 +22,7 @@ export default async function CalendarPage({ params }: Props) {
           </p>
         </div>
         <a
-          href={`/api/google-calendar/connect?locale=${locale}`}
+          href={buildApiUrl(`/api/google-calendar/connect?locale=${locale}`)}
           className="px-4 py-2 bg-zinc-900 dark:bg-white dark:text-black text-white rounded-lg text-sm font-medium"
         >
           Sincronizar Google Calendar

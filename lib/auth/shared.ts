@@ -1,5 +1,6 @@
 export const AUTH_USERS_COOKIE = 'clearup_users';
 export const AUTH_SESSION_COOKIE = 'clearup_session';
+export const FRONTEND_SESSION_COOKIE = 'clearup_front_session';
 export const GOOGLE_REFRESH_TOKEN_COOKIE_PREFIX = 'gc_refresh_token';
 
 export type AuthUser = {

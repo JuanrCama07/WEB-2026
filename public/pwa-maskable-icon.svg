@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="ClearUp">
+  <rect width="512" height="512" fill="#157a6e"/>
+  <circle cx="256" cy="256" r="190" fill="#f3f7f7" opacity="0.12"/>
+  <path d="M284 164c42 0 78 20 101 52l-61 44c-9-16-24-26-43-26-29 0-50 22-50 54s21 54 50 54c19 0 34-10 43-26l61 44c-23 32-59 52-101 52-77 0-134-53-134-124s57-124 134-124Z" fill="#ffffff"/>
+  <circle cx="326" cy="288" r="22" fill="#9fe5da"/>
+</svg>

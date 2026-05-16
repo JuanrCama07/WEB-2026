@@ -66,10 +66,16 @@ const emptyForm: FormState = {
 };
 
 const statusOrder: ActivityStatus[] = ['pending', 'inProgress', 'completed'];
-const today = new Date('2026-03-18T00:00:00');
+
+function getToday() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today;
+}
 
 export function TasksManager({ copy }: { copy: TasksCopy }) {
   const activities = useStoredActivities();
+  const today = useMemo(() => getToday(), []);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
 
@@ -86,15 +92,15 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
       highPriority: activities.filter((activity) => activity.priority === 'high').length,
       completed: activities.filter((activity) => activity.status === 'completed').length,
     };
-  }, [activities]);
+  }, [activities, today]);
 
   const smartAlerts = useMemo(() => {
     return activities
       .filter((activity) => activity.status !== 'completed')
-      .map((activity) => buildSmartAlert(activity, copy, getActivityProgress(activity)))
+      .map((activity) => buildSmartAlert(activity, copy, getActivityProgress(activity), today))
       .filter(isSmartAlert)
       .sort((left, right) => escalationScore(right.level) - escalationScore(left.level));
-  }, [activities, copy]);
+  }, [activities, copy, today]);
 
   function resetForm() {
     setEditingId(null);
@@ -250,7 +256,7 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
           return activity;
         }
 
-        const daysLeft = getDaysLeft(activity.dueDate);
+        const daysLeft = getDaysLeft(activity.dueDate, today);
 
         if (daysLeft <= 2) {
           return {
@@ -551,7 +557,7 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
               const typeLabel = copy.types[activity.type];
               const priorityLabel = copy.priorities[activity.priority];
               const statusLabel = copy.statuses[activity.status];
-              const escalation = getEscalation(activity);
+              const escalation = getEscalation(activity, today);
 
               return (
                 <article key={activity.id} className="app-panel-strong rounded-[2rem] p-6">
@@ -620,7 +626,7 @@ export function TasksManager({ copy }: { copy: TasksCopy }) {
                       {copy.labels.smartRule}
                     </p>
                     <p className="mt-2 text-sm font-semibold text-zinc-800">
-                      {buildActivityRule(activity, copy, activityProgress)}
+                      {buildActivityRule(activity, copy, activityProgress, today)}
                     </p>
                   </div>
 
@@ -875,7 +881,7 @@ function InfoCard({ label, value }: { label: string; value: string }) {
   );
 }
 
-function getDaysLeft(dueDate: string) {
+function getDaysLeft(dueDate: string, today: Date) {
   const due = new Date(`${dueDate}T00:00:00`);
   return Math.ceil((due.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 }
@@ -893,8 +899,8 @@ function calculateProgressFromSubtasks(subtasks: Activity['subtasks'], fallbackP
   return Math.round((completedSubtasks / subtasks.length) * 100);
 }
 
-function getEscalation(activity: Activity): EscalationLevel {
-  const daysLeft = getDaysLeft(activity.dueDate);
+function getEscalation(activity: Activity, today: Date): EscalationLevel {
+  const daysLeft = getDaysLeft(activity.dueDate, today);
   const progress = getActivityProgress(activity);
 
   if (daysLeft <= 1 && activity.status !== 'completed') {
@@ -916,8 +922,8 @@ function escalationScore(level: EscalationLevel) {
   return level === 'critical' ? 4 : level === 'high' ? 3 : level === 'medium' ? 2 : 1;
 }
 
-function buildSmartAlert(activity: Activity, copy: TasksCopy, progress: number): SmartAlert | null {
-  const daysLeft = getDaysLeft(activity.dueDate);
+function buildSmartAlert(activity: Activity, copy: TasksCopy, progress: number, today: Date): SmartAlert | null {
+  const daysLeft = getDaysLeft(activity.dueDate, today);
 
   if (daysLeft <= 1) {
     return {
@@ -966,8 +972,8 @@ function isSmartAlert(alert: SmartAlert | null): alert is SmartAlert {
   return alert !== null;
 }
 
-function buildActivityRule(activity: Activity, copy: TasksCopy, progress: number) {
-  const daysLeft = getDaysLeft(activity.dueDate);
+function buildActivityRule(activity: Activity, copy: TasksCopy, progress: number, today: Date) {
+  const daysLeft = getDaysLeft(activity.dueDate, today);
 
   if (daysLeft <= 1) {
     return copy.smartMessages.criticalDeadline;

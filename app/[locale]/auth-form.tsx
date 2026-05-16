@@ -4,6 +4,10 @@ import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import { buildApiUrl } from '@/lib/api';
+import { persistClientSession } from '@/lib/auth/client';
+import type { AuthSession } from '@/lib/auth/shared';
+
 type AuthCopy = {
   badge: string;
   title: string;
@@ -41,17 +45,22 @@ export function AuthForm({ locale, copy }: { locale: string; copy: AuthCopy }) {
     setError('');
 
     startTransition(async () => {
-      const response = await fetch(`/api/auth/${mode}`, {
+      const response = await fetch(buildApiUrl(`/api/auth/${mode}`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
+        credentials: 'include',
       });
 
-      const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+      const payload = (await response.json().catch(() => null)) as { error?: string; user?: AuthSession } | null;
 
       if (!response.ok) {
         setError(payload?.error ?? 'No fue posible completar la solicitud.');
         return;
+      }
+
+      if (payload?.user) {
+        persistClientSession(payload.user);
       }
 
       router.replace(`/${locale}/dashboard`);

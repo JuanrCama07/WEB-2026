@@ -3,12 +3,17 @@
 import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useStoredActivities } from '@/lib/activities-store';
+import { buildApiUrl } from '@/lib/api';
 
-const today = new Date('2026-03-18T00:00:00');
+function getToday() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today;
+}
 const WEEK_DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 const HOURS = Array.from({ length: 10 }, (_, i) => i + 8);
 
-function getDaysLeft(dueDate: string): number {
+function getDaysLeft(dueDate: string, today: Date): number {
   const due = new Date(dueDate);
   const diff = due.getTime() - today.getTime();
   return Math.ceil(diff / (1000 * 60 * 60 * 24));
@@ -21,7 +26,7 @@ function getWeekStart(date: Date): Date {
   return new Date(d.setDate(diff));
 }
 
-function isThisWeek(dueDate: string): boolean {
+function isThisWeek(dueDate: string, today: Date): boolean {
   const due = new Date(dueDate);
   const weekStart = getWeekStart(today);
   const weekEnd = new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000);
@@ -31,8 +36,9 @@ function isThisWeek(dueDate: string): boolean {
 export default function CalendarPage() {
   const t = useTranslations('Calendar');
   const activities = useStoredActivities();
+  const today = useMemo(() => getToday(), []);
 
-  const weekStart = useMemo(() => getWeekStart(today), []);
+  const weekStart = useMemo(() => getWeekStart(today), [today]);
   const weekDays = useMemo(() => {
     return Array.from({ length: 7 }, (_, i) => {
       const date = new Date(weekStart.getTime() + i * 24 * 60 * 60 * 1000);
@@ -42,9 +48,9 @@ export default function CalendarPage() {
 
   const thiWeekActivities = useMemo(() => {
     return activities
-      .filter(a => a.status !== 'completed' && isThisWeek(a.dueDate))
-      .sort((a, b) => getDaysLeft(a.dueDate) - getDaysLeft(b.dueDate));
-  }, [activities]);
+      .filter(a => a.status !== 'completed' && isThisWeek(a.dueDate, today))
+      .sort((a, b) => getDaysLeft(a.dueDate, today) - getDaysLeft(b.dueDate, today));
+  }, [activities, today]);
 
   const suggestedDistribution = useMemo(() => {
     if (thiWeekActivities.length === 0) return [];
@@ -68,7 +74,7 @@ export default function CalendarPage() {
 
       <div className="flex gap-3">
         <a
-          href={`/api/google-calendar/connect?locale=es`}
+          href={buildApiUrl(`/api/google-calendar/connect?locale=es`)}
           className="rounded-2xl bg-[linear-gradient(135deg,#0f172a,#1e293b)] px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_30px_rgba(15,23,42,0.2)] transition hover:brightness-105"
         >
           {t('sync')}
@@ -93,7 +99,7 @@ export default function CalendarPage() {
                   <p className="font-semibold text-zinc-900 dark:text-white">{activity.title}</p>
                   <p className="text-sm text-zinc-600 dark:text-zinc-400">{activity.course}</p>
                   <p className="text-xs text-blue-600 dark:text-blue-400 mt-2">
-                    {getDaysLeft(activity.dueDate)} días
+                    {getDaysLeft(activity.dueDate, today)} días
                   </p>
                 </div>
               ))}
@@ -142,7 +148,7 @@ export default function CalendarPage() {
 
           <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {thiWeekActivities.map((activity) => {
-              const daysLeft = getDaysLeft(activity.dueDate);
+              const daysLeft = getDaysLeft(activity.dueDate, today);
               const priorityColor = {
                 high: 'border-rose-200 bg-rose-50 dark:border-rose-900 dark:bg-rose-950',
                 medium: 'border-amber-200 bg-amber-50 dark:border-amber-900 dark:bg-amber-950',

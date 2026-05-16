@@ -4,6 +4,15 @@
 npm install
 npx next dev --webpack
 
+## Backend separado
+El frontend ahora consume un backend externo configurable con:
+
+```bash
+NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:4000
+```
+
+El repositorio backend separado debe exponer auth, activities y Google Calendar.
+
 ## Descripción del proyecto
 ClearUp es una plataforma orientada a estudiantes universitarios que centraliza la organización académica, laboral y personal dentro de un único sistema.
 

@@ -3,7 +3,9 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { useAuthSession } from '@/lib/auth/client';
+import { buildApiUrl } from '@/lib/api';
+import { persistClientSession, useAuthSession } from '@/lib/auth/client';
+import type { AuthSession } from '@/lib/auth/shared';
 
 type ProfileCopy = {
   badge: string;
@@ -41,13 +43,14 @@ export function ProfileSettings({ copy }: { copy: ProfileCopy }) {
     event.preventDefault();
     setFeedback(null);
 
-    const response = await fetch('/api/auth/profile', {
+    const response = await fetch(buildApiUrl('/api/auth/profile'), {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, password }),
+      credentials: 'include',
     });
 
-    const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+    const payload = (await response.json().catch(() => null)) as { error?: string; user?: AuthSession } | null;
 
     if (!response.ok) {
       setFeedback({
@@ -58,6 +61,9 @@ export function ProfileSettings({ copy }: { copy: ProfileCopy }) {
     }
 
     setPassword('');
+    if (payload?.user) {
+      persistClientSession(payload.user);
+    }
     setFeedback({ type: 'success', message: copy.success });
     startTransition(() => {
       router.refresh();

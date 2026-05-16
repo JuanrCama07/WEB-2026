@@ -4,7 +4,11 @@ import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { type Activity, useStoredActivities, updateStoredActivities } from '@/lib/activities-store';
 
-const today = new Date('2026-03-18T00:00:00');
+function getToday() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today;
+}
 
 type AlertLevel = 'critical' | 'high' | 'medium';
 
@@ -19,17 +23,17 @@ type Alert = {
   suggestedAction: string;
 };
 
-function getDaysLeft(dueDate: string): number {
+function getDaysLeft(dueDate: string, today: Date): number {
   const due = new Date(dueDate);
   const diff = due.getTime() - today.getTime();
   return Math.ceil(diff / (1000 * 60 * 60 * 24));
 }
 
-function getAlerts(activities: Activity[]): Alert[] {
+function getAlerts(activities: Activity[], today: Date): Alert[] {
   const alerts: Alert[] = [];
 
   activities.filter(a => a.status !== 'completed').forEach(activity => {
-    const daysLeft = getDaysLeft(activity.dueDate);
+    const daysLeft = getDaysLeft(activity.dueDate, today);
     const isHighPriority = activity.priority === 'high';
     const isMediumPriority = activity.priority === 'medium';
     const hasReminder = !!activity.reminder;
@@ -131,8 +135,9 @@ function levelBadgeColor(level: AlertLevel): string {
 export default function RemindersPage() {
   const t = useTranslations('Reminders');
   const activities = useStoredActivities();
+  const today = useMemo(() => getToday(), []);
 
-  const alerts = useMemo(() => getAlerts(activities), [activities]);
+  const alerts = useMemo(() => getAlerts(activities, today), [activities, today]);
 
   const criticalAlerts = alerts.filter((a) => a.level === 'critical');
   const emergingRisks = alerts.filter((a) => a.level !== 'critical');

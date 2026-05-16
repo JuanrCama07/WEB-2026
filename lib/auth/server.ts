@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 
-import { AUTH_SESSION_COOKIE, parseCookieJson, type AuthSession, type AuthUser } from './shared';
+import { FRONTEND_SESSION_COOKIE, parseCookieJson, type AuthSession, type AuthUser } from './shared';
 
 export async function hashPassword(password: string) {
   const payload = new TextEncoder().encode(password);
@@ -20,5 +20,5 @@ export function sanitizeSession(user: AuthUser): AuthSession {
 
 export async function readServerSession() {
   const cookieStore = await cookies();
-  return parseCookieJson<AuthSession>(cookieStore.get(AUTH_SESSION_COOKIE)?.value);
+  return parseCookieJson<AuthSession>(cookieStore.get(FRONTEND_SESSION_COOKIE)?.value);
 }
